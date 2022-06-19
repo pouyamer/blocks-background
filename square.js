@@ -6,26 +6,31 @@ class Square {
     this.strokeColor = strokeColor
     this.size = size
     this.light = light
+
     this.isTurningOn = true
   }
 
   lightOn = () => {
     // If RandomlyChange is true, change the light value on random [0 - incOrDec]
-    this.fillColor.l += this.light.randomlyChange
-      ? Math.random() * this.light.step.increase
-      : this.light.step.increase
+    const { randomlyChange, step, max } = this.light
 
-    if (this.fillColor.l > this.light.max) {
+    this.fillColor.l += randomlyChange
+      ? Math.random() * step.increase
+      : step.increase
+
+    if (this.fillColor.l > max) {
       this.isTurningOn = false
     }
   }
 
   lightOff() {
-    this.fillColor.l -= this.light.randomlyChange
-      ? Math.random() * this.light.step.decrease
-      : this.light.step.decrease
+    // If RandomlyChange is true, change the light value on random [0 - incOrDec]
+    const { randomlyChange, step, min } = this.light
+    this.fillColor.l -= randomlyChange
+      ? Math.random() * step.decrease
+      : step.decrease
 
-    if (this.fillColor.l < this.light.min) {
+    if (this.fillColor.l < min) {
       this.isTurningOn = true
     }
   }

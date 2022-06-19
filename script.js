@@ -16,18 +16,30 @@ let squares = []
 
 // Setting the squares
 const setSquares = () => {
-  for (let i = 0; i < size.width / config.square.size; i++) {
-    for (let j = 0; j < size.height / config.square.size; j++) {
+  const { size: squareSize, light, fillColor, strokeColor } = config.square
+
+  for (let i = 0; i < size.width / squareSize; i++) {
+    for (let j = 0; j < size.height / squareSize; j++) {
+      const squareFillColor = {
+        ...fillColor,
+        l: randBetween(light.min, light.max)
+      }
+
+      const squareConfig = {
+        ...config,
+        square: {
+          ...config.square,
+          fillColor: squareFillColor
+        }
+      }
+
       const newSquare = new Square(
-        i * config.square.size,
-        j * config.square.size,
-        config.square.size,
-        {
-          ...config.square.fillColor,
-          l: randBetween(config.square.light.min, config.square.light.max)
-        },
-        { ...config.square.strokeColor },
-        config.square.light
+        i * squareSize,
+        j * squareSize,
+        squareSize,
+        squareFillColor,
+        strokeColor,
+        light
       )
 
       squares.push(newSquare)
