@@ -1,7 +1,9 @@
 class Square {
-  constructor(x, y, size, fillColor, strokeColor, light) {
+  constructor(x, y, squareConfig) {
+    const { size, light, fillColor, strokeColor } = squareConfig
     this.x = x
     this.y = y
+
     this.fillColor = fillColor
     this.strokeColor = strokeColor
     this.size = size
@@ -23,7 +25,7 @@ class Square {
     }
   }
 
-  lightOff() {
+  lightOff = () => {
     // If RandomlyChange is true, change the light value on random [0 - incOrDec]
     const { randomlyChange, step, min } = this.light
     this.fillColor.l -= randomlyChange
@@ -35,22 +37,27 @@ class Square {
     }
   }
 
-  lightOnAndOff() {
+  lightOnAndOff = () => {
     this.isTurningOn ? this.lightOn() : this.lightOff()
   }
 
-  fill() {
+  fill = () => {
     ctx.fillStyle = hslStringify(this.fillColor)
     ctx.fillRect(this.x, this.y, this.size, this.size)
   }
 
-  stroke() {
+  stroke = () => {
     ctx.strokeStyle = hslStringify(this.strokeColor)
     ctx.strokeRect(this.x, this.y, this.size, this.size)
   }
 
-  draw() {
+  draw = () => {
     this.fill()
     this.stroke()
+  }
+
+  update = () => {
+    this.draw()
+    this.lightOnAndOff()
   }
 }
