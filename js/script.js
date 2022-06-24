@@ -20,10 +20,8 @@ const setSquares = () => {
 
   for (let i = 0; i < canvasSize.width / size; i++) {
     for (let j = 0; j < canvasSize.height / size; j++) {
-      /* current square have its light value 
-         randomised based on max and min of light value
-          in the config */
-
+      // Ranged values that go into effect if their respective
+      // isRanged is set to "true"
       const newRandomizedLight = randBetween(light.range.min, light.range.max)
       const newRandomizedHue = randBetween(hue.range.min, hue.range.max)
 
