@@ -107,11 +107,7 @@ class Square {
 
   update = () => {
     this.draw()
-    if (this.light.isRanged) {
-      this.lightOnAndOff()
-    }
-    if (this.hue.isRanged) {
-      this.hueUpAndDown()
-    }
+    if (this.light.isRanged) this.lightOnAndOff()
+    if (this.hue.isRanged) this.hueUpAndDown()
   }
 }
