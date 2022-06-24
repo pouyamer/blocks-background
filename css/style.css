@@ -10,8 +10,8 @@
   display: block;
 
   /*
-    The two lines below moves the canvas
-    behind the actual contents
+     The two lines below moves the canvas
+     behind the actual contents.
   */
   position: absolute;
   z-index: -1;
