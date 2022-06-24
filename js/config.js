@@ -8,8 +8,8 @@ let config = {
       isRanged: true,
       range: {
         // Max and Min value of light is [0 - 100]
-        min: 27,
-        max: 40
+        min: 17,
+        max: 35
       },
       // if !isRanged then it gets the Value [0 - 100]
       value: 40,
@@ -30,22 +30,22 @@ let config = {
       isRanged: true,
       range: {
         // Max and Min value of hue is [0 - 360]
-        min: 240,
-        max: 230
+        min: 335,
+        max: 340
       },
       // if !isRanged then it gets the Value [0 - 360]
-      value: 20,
+      value: 340,
       //------------------------------
       // rate of decrease / increase
       step: {
-        increase: 3,
-        decrease: 5
+        increase: 2,
+        decrease: 2
       },
       // if true changes the hue value on random [0 - incOrDec]
       randomlyChange: true
     },
 
-    size: 13, // Try above 15 for better performence
+    size: 14, // Try above 15 for better performence
     fillColor: {
       h: 340,
       s: 100,
