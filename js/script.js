@@ -1,6 +1,6 @@
 const canvas = document.querySelector(".canvas")
 const ctx = canvas.getContext("2d")
-const { canvasSize } = config
+const { size: canvasSize } = config.canvas
 canvas.width = canvasSize.width
 canvas.height = canvasSize.height
 
@@ -16,22 +16,25 @@ let squares = []
 
 // Setting the squares
 const setSquares = () => {
-  const { size, light, fillColor } = config.square
+  const { size, light, hue, fillColor } = config.square
 
   for (let i = 0; i < canvasSize.width / size; i++) {
     for (let j = 0; j < canvasSize.height / size; j++) {
       /* current square have its light value 
          randomised based on max and min of light value
           in the config */
-      const newRandomizedFillColor = {
-        ...fillColor,
-        l: randBetween(light.min, light.max)
-      }
+
+      const newRandomizedLight = randBetween(light.range.min, light.range.max)
+      const newRandomizedHue = randBetween(hue.range.min, hue.range.max)
 
       /* A duplicate of square config with new fillColor Value */
       const currentSquareConfig = {
         ...config.square,
-        fillColor: newRandomizedFillColor
+        fillColor: {
+          ...fillColor,
+          l: light.isRanged ? newRandomizedLight : light.value,
+          h: hue.isRanged ? newRandomizedHue : hue.value
+        }
       }
 
       // Square(x, y, squareConfig)
