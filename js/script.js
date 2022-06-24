@@ -9,8 +9,7 @@ const hslStringify = color => {
   return `hsl(${h}, ${s}%, ${l}%, ${a})`
 }
 
-const randBetween = (min, max) =>
-  Math.floor(Math.random() * (max - min + 1)) + min
+const randBetween = (min, max) => Math.random() * (max - min + 1) + min
 
 let squares = []
 
