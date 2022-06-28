@@ -19,18 +19,13 @@ const setSquares = () => {
 
   for (let i = 0; i < canvasSize.width / size; i++) {
     for (let j = 0; j < canvasSize.height / size; j++) {
-      // Ranged values that go into effect if their respective
-      // isRanged is set to "true"
-      const newRandomizedLight = randBetween(light.range.min, light.range.max)
-      const newRandomizedHue = randBetween(hue.range.min, hue.range.max)
-
       /* A duplicate of square config with new fillColor Value */
       const currentSquareConfig = {
         ...config.square,
         fillColor: {
           ...fillColor,
-          l: light.isRanged ? newRandomizedLight : light.value,
-          h: hue.isRanged ? newRandomizedHue : hue.value
+          l: light.isRanged ? light.range.min : light.value.off,
+          h: hue.isRanged ? hue.range.min : hue.value
         }
       }
 
@@ -50,4 +45,5 @@ const render = () => {
 
 // Main App:
 setSquares()
+
 render()
