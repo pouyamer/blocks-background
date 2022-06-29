@@ -10,10 +10,11 @@ class Square {
     this.size = size
     this.light = light
     this.hue = hue
-    this.lightFrequncy = light.frequancy
     this.hueFrequncy = hue.frequancy
 
-    this.willChangeLight = Math.random() < light.frequancy
+    // it'll be set once the app runs
+    this.isLit = false
+
     this.willChangeHue = Math.random() < hue.frequancy
     this.isTurningOn = true
     this.isHueIncreasing = true
@@ -25,8 +26,7 @@ class Square {
     const {
       randomlyChange,
       step,
-      range: { max },
-      value
+      range: { max }
     } = this.light
 
     this.fillColor.l += randomlyChange
@@ -35,7 +35,7 @@ class Square {
 
     if (this.fillColor.l > max) {
       this.isTurningOn = false
-      this.fillColor.l = this.isRanged ? max : value.on
+      this.fillColor.l = max
     }
   }
 
@@ -44,8 +44,7 @@ class Square {
     const {
       randomlyChange,
       step,
-      range: { min },
-      value
+      range: { min }
     } = this.light
 
     this.fillColor.l -= randomlyChange
@@ -54,7 +53,7 @@ class Square {
 
     if (this.fillColor.l < min) {
       this.isTurningOn = true
-      this.fillColor.l = this.isRanged ? min : value.off
+      this.fillColor.l = min
     }
   }
 
@@ -78,6 +77,7 @@ class Square {
 
     if (this.fillColor.h > max) {
       this.isHueIncreasing = false
+      this.fillColor.h = max
     }
   }
 
@@ -86,8 +86,7 @@ class Square {
     const {
       randomlyChange,
       step,
-      range: { min },
-      value
+      range: { min }
     } = this.hue
 
     this.fillColor.h -= randomlyChange
@@ -96,6 +95,7 @@ class Square {
 
     if (this.fillColor.h < min) {
       this.isHueIncreasing = true
+      this.fillColor.h = min
     }
   }
 
@@ -120,15 +120,12 @@ class Square {
 
   update = () => {
     this.draw()
-    if (this.willChangeLight) {
-      // If the light is ranged:
-      if (this.light.isRanged) this.lightOnAndOff()
+    // If the light is ranged:
+    if (this.light.isRanged) this.lightOnAndOff()
 
-      // This Lights up the squares on run
-      // if the light is not ranged:
-      if (!this.light.isRanged && this.isTurningOn) this.lightOn()
-
-      if (this.willChangeHue && this.hue.isRanged) this.hueUpAndDown()
-    }
+    // This Lights up the squares on run
+    // if the light is not ranged:
+    if (!this.light.isRanged) this.fillColor.l = this.light.value.on
+    if (this.willChangeHue && this.hue.isRanged) this.hueUpAndDown()
   }
 }
