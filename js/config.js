@@ -16,7 +16,7 @@ let config = {
       isRanged: true,
       range: {
         // Max and Min value of light is [0 - 100]
-        min: 20,
+        min: 10,
         max: 45
       },
       // if !isRanged then it gets the Value [0 - 100]
@@ -24,14 +24,14 @@ let config = {
       // rate of decrease / increase
       step: {
         increase: 4,
-        decrease: 1
+        decrease: 4
       },
       // if true changes the light value on random [0 - incOrDec]
       randomlyChange: true,
       // Frequency: How many of the squares will change the light value
       frequancy: 1,
       // if true, the light value will be on the min (o.w max) light range (if isRanged)
-      defaultOnMin: true
+      defaultOnMin: false
     },
 
     hue: {
@@ -43,15 +43,15 @@ let config = {
       isRanged: true,
       range: {
         // Max and Min value of hue is [0 - 360]
-        min: 345,
-        max: 350
+        min: 49,
+        max: 51
       },
       // if !isRanged then it gets the Value [0 - 360]
       value: 52,
       //------------------------------
       // rate of decrease / increase
       step: {
-        increase: 5,
+        increase: 2,
         decrease: 1
       },
       // if true changes the hue value on random [0 - incOrDec]
@@ -62,7 +62,7 @@ let config = {
         (Among the lit squares if boundToLight is true)
         will change the hue value
       */
-      frequancy: 0.8,
+      frequancy: 0.3,
       // if true sets the non-selected squares to the min (o.w max) hue range (if isRanged)
       defaultOnMin: true
     },
@@ -76,7 +76,7 @@ let config = {
       isRanged: true,
       range: {
         // Max and Min value of saturation is [0 - 100]
-        min: 60,
+        min: 50,
         max: 80
       },
       // if !isRanged then it gets the Value [0 - 100]
@@ -84,7 +84,7 @@ let config = {
       //------------------------------
       // rate of decrease / increase
       step: {
-        increase: 5,
+        increase: 1,
         decrease: 1
       },
       // if true changes the saturation value on random [0 - incOrDec]
@@ -95,19 +95,19 @@ let config = {
         (Among the lit squares if boundToLight is true)
         will change the saturation value
       */
-      frequancy: 1,
+      frequancy: 0.5,
       // if true sets the non-selected squares to the min (o.w max) saturation range (if isRanged)
-      defaultOnMin: true
+      defaultOnMin: false
     },
 
-    size: 12, // Try above 15 for better performence
+    size: 20, // Try above 15 for better performence
     fillColor: {
-      h: 0,
-      s: 90,
-      l: 0, // "l" value is set once the app runs
+      // h, s, l is set once app runs
       a: 1
     },
     hasBorders: false,
+    // modes: "square", "circle", "bowlingPin"
+    mode: "bowlingPin",
     borderColor: {
       h: 340,
       s: 90,
