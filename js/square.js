@@ -1,6 +1,7 @@
 class Square {
   constructor(x, y, squareConfig) {
-    const { size, light, fillColor, borderColor, hue } = squareConfig
+    const { size, light, fillColor, borderColor, hue, saturation } =
+      squareConfig
     this.x = x
     this.y = y
 
@@ -11,13 +12,17 @@ class Square {
     this.light = light
     this.hue = hue
     this.hueFrequncy = hue.frequancy
+    this.saturation = saturation
+    this.saturationFrequncy = saturation.frequancy
 
     // it'll be set once the app runs
     this.isLit = false
 
     this.willChangeHue = Math.random() < hue.frequancy
+    this.willChangeSaturation = Math.random() < saturation.frequancy
     this.isTurningOn = true
     this.isHueIncreasing = true
+    this.isBecomingSaturated = true
   }
 
   // Light Functions:
@@ -103,6 +108,46 @@ class Square {
     this.isHueIncreasing ? this.hueUp() : this.hueDown()
   }
 
+  saturate = () => {
+    // If RandomlyChange is true, change the hue value on random [0 - incOrDec]
+    const {
+      randomlyChange,
+      step,
+      range: { max }
+    } = this.saturation
+
+    this.fillColor.s += randomlyChange
+      ? Math.random() * step.increase
+      : step.increase
+
+    if (this.fillColor.s > max) {
+      this.isBecomingSaturated = false
+      this.fillColor.s = max
+    }
+  }
+
+  desaturate = () => {
+    // If RandomlyChange is true, change the hue value on random [0 - incOrDec]
+    const {
+      randomlyChange,
+      step,
+      range: { min }
+    } = this.saturation
+
+    this.fillColor.s -= randomlyChange
+      ? Math.random() * step.decrease
+      : step.decrease
+
+    if (this.fillColor.s < min) {
+      this.isBecomingSaturated = true
+      this.fillColor.s = min
+    }
+  }
+
+  saturateAndDesaturate = () => {
+    this.isBecomingSaturated ? this.saturate() : this.desaturate()
+  }
+
   fill = () => {
     ctx.fillStyle = hslStringify(this.fillColor)
     ctx.fillRect(this.x, this.y, this.size, this.size)
@@ -127,5 +172,7 @@ class Square {
     // if the light is not ranged:
     if (!this.light.isRanged) this.fillColor.l = this.light.value.on
     if (this.willChangeHue && this.hue.isRanged) this.hueUpAndDown()
+    if (this.willChangeSaturation && this.saturation.isRanged)
+      this.saturateAndDesaturate()
   }
 }

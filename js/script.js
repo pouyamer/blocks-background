@@ -6,11 +6,12 @@ canvas.height = canvasSize.height
 
 // An anonymous function that gets the offlight value
 const lightOffColor = (() => {
-  const { light, hue, fillColor } = config.square
+  const { light, hue, fillColor, saturation } = config.square
   return {
     ...fillColor,
     l: light.isRanged ? light.range.min : light.value.off,
-    h: hue.isRanged ? hue.range.min : hue.value
+    h: hue.isRanged ? hue.range.min : hue.value,
+    s: saturation.isRanged ? saturation.range.min : saturation.value
   }
 })()
 
@@ -24,7 +25,7 @@ let squares = []
 
 // Setting the squares
 const setSquares = () => {
-  const { size, light, hue, fillColor } = config.square
+  const { size, light, hue, fillColor, saturation } = config.square
 
   for (let i = 0; i < canvasSize.width / size; i++) {
     for (let j = 0; j < canvasSize.height / size; j++) {
@@ -35,9 +36,20 @@ const setSquares = () => {
         fillColor: {
           ...fillColor,
           l: light.isRanged
-            ? randBetween(light.range.min, light.range.max)
-            : light.value.on,
-          h: hue.isRanged ? hue.range.min : hue.value
+            ? light.defaultOnMin
+              ? light.range.min
+              : light.range.max
+            : light.value,
+          h: hue.isRanged
+            ? hue.defaultOnMin
+              ? hue.range.min
+              : hue.range.max
+            : hue.value,
+          s: saturation.isRanged
+            ? saturation.defaultOnMin
+              ? saturation.range.min
+              : saturation.range.max
+            : saturation.value
         }
       }
 
@@ -51,7 +63,9 @@ const setSquares = () => {
 }
 
 const render = () => {
-  squares.filter(square => square.isLit).forEach(square => square.update())
+  squares
+    .filter(square => (config.square.boundToLight ? square.isLit : true))
+    .forEach(square => square.update())
   requestAnimationFrame(render)
 }
 
