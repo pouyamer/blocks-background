@@ -4,9 +4,11 @@ const { size: canvasSize } = config.canvas
 canvas.width = canvasSize.width
 canvas.height = canvasSize.height
 
+let paused = false
+
 // An anonymous function that gets the offlight value
 const lightOffColor = (() => {
-  const { light, hue, fillColor, saturation } = config.square
+  const { light, hue, saturation, fillColor } = config.square
   return {
     ...fillColor,
     l: light.isRanged ? light.range.min : light.value.off,
@@ -62,11 +64,16 @@ const setSquares = () => {
   }
 }
 
+// saves the offColor at the start of the app
+const backgroundColor = hslStringify(lightOffColor)
+
 const render = () => {
   squares
     .filter(square => (config.square.boundToLight ? square.isLit : true))
     .forEach(square => square.update())
-  requestAnimationFrame(render)
+
+  // if app is paused then it stops rendering
+  !paused && requestAnimationFrame(render)
 }
 
 // Main App:
@@ -80,3 +87,9 @@ setSquares()
 
 //   Render the squares
 render()
+
+document.addEventListener("click", () => {
+  paused = !paused
+  // if app isn't paused then it re-renders
+  !paused && render()
+})
