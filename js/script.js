@@ -93,3 +93,9 @@ document.addEventListener("click", () => {
   // if app isn't paused then it re-renders
   !paused && render()
 })
+
+window.addEventListener("resize", () => {
+  canvas.width = canvasSize.width
+  canvas.height = canvasSize.height
+  window.location.reload()
+})
