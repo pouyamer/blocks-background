@@ -203,7 +203,7 @@ class Square {
 
     // This Lights up the squares on run
     // if the light is not ranged:
-    if (!light.isRanged) fillColor.l = light.value.on
+    if (!light.isRanged) fillColor.l = light.value
     if (this.willChangeHue && hue.isRanged) this.hueUpAndDown()
     if (this.willChangeSaturation && saturation.isRanged)
       this.saturateAndDesaturate()

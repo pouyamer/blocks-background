@@ -16,15 +16,15 @@ let config = {
       isRanged: true,
       range: {
         // Max and Min value of light is [0 - 100]
-        min: 10,
-        max: 45
+        min: 0,
+        max: 100
       },
       // if !isRanged then it gets the Value [0 - 100]
       value: 35,
       // rate of decrease / increase
       step: {
-        increase: 4,
-        decrease: 4
+        increase: 5,
+        decrease: 5
       },
       // if true changes the light value on random [0 - incOrDec]
       randomlyChange: true,
@@ -43,8 +43,8 @@ let config = {
       isRanged: true,
       range: {
         // Max and Min value of hue is [0 - 360]
-        min: 49,
-        max: 51
+        min: 30,
+        max: 35
       },
       // if !isRanged then it gets the Value [0 - 360]
       value: 52,
@@ -76,8 +76,8 @@ let config = {
       isRanged: true,
       range: {
         // Max and Min value of saturation is [0 - 100]
-        min: 50,
-        max: 80
+        min: 0,
+        max: 100
       },
       // if !isRanged then it gets the Value [0 - 100]
       value: 20,
@@ -105,9 +105,9 @@ let config = {
       // h, s, l is set once app runs
       a: 1
     },
-    hasBorders: false,
+    hasBorders: true,
     // modes: "square", "circle", "bowlingPin"
-    mode: "bowlingPin",
+    mode: "square",
     borderColor: {
       h: 340,
       s: 90,
