@@ -20,7 +20,7 @@ let config = {
         max: 100
       },
       // if !isRanged then it gets the Value [0 - 100]
-      value: 35,
+      value: 50,
       // rate of decrease / increase
       step: {
         increase: 5,
@@ -43,8 +43,8 @@ let config = {
       isRanged: true,
       range: {
         // Max and Min value of hue is [0 - 360]
-        min: 30,
-        max: 35
+        min: 330,
+        max: 360
       },
       // if !isRanged then it gets the Value [0 - 360]
       value: 52,
@@ -62,7 +62,7 @@ let config = {
         (Among the lit squares if boundToLight is true)
         will change the hue value
       */
-      frequancy: 0.3,
+      frequancy: 1,
       // if true sets the non-selected squares to the min (o.w max) hue range (if isRanged)
       defaultOnMin: true
     },
@@ -105,9 +105,9 @@ let config = {
       // h, s, l is set once app runs
       a: 1
     },
-    hasBorders: true,
+    hasBorders: false,
     // modes: "square", "circle", "bowlingPin"
-    mode: "square",
+    mode: "bowlingPin",
     borderColor: {
       h: 340,
       s: 90,
