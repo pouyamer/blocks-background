@@ -88,7 +88,7 @@ setSquares()
 //   Render the squares
 render()
 
-document.addEventListener("click", () => {
+canvas.addEventListener("click", () => {
   paused = !paused
   // if app isn't paused then it re-renders
   !paused && render()
