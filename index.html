@@ -21,31 +21,63 @@
 
   <div class="hamburger-container">
     <div class="hamburger-menu">
-      <div class="bar bar-top"></div>
-      <div class="bar bar-middle"></div>
-      <div class="bar bar-bottom"></div>
+      <div class="hamburger-bar bar-top"></div>
+      <div class="hamburger-bar bar-middle"></div>
+      <div class="hamburger-bar bar-bottom"></div>
     </div>
   </div>
 
 
   <div class="settings">
     <h1>Settings</h1>
-    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vel, modi cupiditate dolor rerum fuga quae illo amet
-      odio, earum rem saepe ea pariatur molestiae distinctio animi impedit incidunt, nemo numquam?</p>
-  </div>
 
-  <!-- Write the rest of the content go below... -->
-  <!--
+    <div class="hue">
+      <h2>Hue</h2>
+      <br>
+      <select name="hue" id="hue" class="select-hue-range">
+        <option value="ranged">Ranged</option>
+        <option value="notRanged">Value</option>
+      </select>
+
+
+      <!-- Two radio inputs named SET MAX and  SET MIN -->
+      <div class="hue-range">
+
+        <input type="radio" value="min" class="radio-min hue-radio-min">
+        <label for="hue-range-min">Set Min</label>
+
+
+        <input type="radio" value="max" checked class="radio-max hue-radio-max">
+        <label for="hue-range-max">Set Max</label>
+
+
+
+
+        <div class="bar-container bar-container">
+          <input type="number" name="hue-min-inp" id="hue-min-inp" class="min" value="0">
+          <div class="bar">
+            <div class="selected"></div>
+          </div>
+          <input type="number" name="hue-max-inp" id="hue-max-inp" class="max" value="300">
+        </div>
+      </div>
+      <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vel, modi cupiditate dolor rerum fuga quae illo amet
+        odio, earum rem saepe ea pariatur molestiae distinctio animi impedit incidunt, nemo numquam?</p>
+    </div>
+
+    <!-- Write the rest of the content go below... -->
+    <!--
       <header>
         ...
 
     -->
-  <script src="./js/config.js"></script>
-  <script src="./js/square.js"></script>
-  <script src="./js/app.js"></script>
-  <script src="./js/settings.js"></script>
+    <script src="./js/functions.js"></script>
+    <script src="./js/config.js"></script>
+    <script src="./js/square.js"></script>
+    <script src="./js/app.js"></script>
+    <script src="./js/settings.js"></script>
 
-  <!-- 
+    <!-- 
     Put your own scripts tags below...
   -->
 </body>
