@@ -69,7 +69,7 @@ const backgroundColor = hslStringify(lightOffColor)
 
 const render = () => {
   squares
-    // .filter(square => (config.square.boundToLight ? square.isLit : true))
+    .filter(square => !config.square.boundToLight || square.isLit)
     .forEach(square => square.update())
 
   // if app is paused then it stops rendering
