@@ -17,14 +17,14 @@ let config = {
       range: {
         // Max and Min value of light is [0 - 100]
         min: 0,
-        max: 100
+        max: 80
       },
       // if !isRanged then it gets the Value [0 - 100]
       value: 50,
       // rate of decrease / increase
       step: {
         increase: 5,
-        decrease: 5
+        decrease: 3
       },
       // if true changes the light value on random [0 - incOrDec]
       randomlyChange: true,
@@ -43,15 +43,15 @@ let config = {
       isRanged: true,
       range: {
         // Max and Min value of hue is [0 - 360]
-        min: 330,
-        max: 360
+        min: 220,
+        max: 250
       },
       // if !isRanged then it gets the Value [0 - 360]
       value: 52,
       //------------------------------
       // rate of decrease / increase
       step: {
-        increase: 2,
+        increase: 1,
         decrease: 1
       },
       // if true changes the hue value on random [0 - incOrDec]
@@ -76,7 +76,7 @@ let config = {
       isRanged: true,
       range: {
         // Max and Min value of saturation is [0 - 100]
-        min: 0,
+        min: 70,
         max: 100
       },
       // if !isRanged then it gets the Value [0 - 100]
@@ -114,7 +114,8 @@ let config = {
       l: 0,
       a: 0.5
     }
-  }
+  },
+  settings: {}
 }
 
 // ADD: Error Handling (light.min > light.max)
