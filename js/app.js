@@ -17,12 +17,6 @@ const lightOffColor = (() => {
   }
 })()
 
-const hslStringify = color => {
-  const { h, s, l, a } = color
-  return `hsl(${h}, ${s}%, ${l}%, ${a})`
-}
-const randBetween = (min, max) => Math.random() * (max - min + 1) + min
-
 let squares = []
 
 // Setting the squares
