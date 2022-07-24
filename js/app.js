@@ -1,6 +1,6 @@
 const canvas = document.querySelector(".canvas")
 const ctx = canvas.getContext("2d")
-const { shapesize: canvasSize } = config.canvas
+const { size: canvasSize } = config.canvas
 canvas.width = canvasSize.width
 canvas.height = canvasSize.height
 
@@ -35,10 +35,10 @@ let squares = []
 
 // Setting the squares
 const setSquares = () => {
-  const { shapesize, light, hue, fillColor, saturation } = config.square
+  const { shapeSize, light, hue, fillColor, saturation } = config.square
 
-  for (let i = 0; i < canvasSize.width / shapesize; i++) {
-    for (let j = 0; j < canvasSize.height / shapesize; j++) {
+  for (let i = 0; i < canvasSize.width / shapeSize; i++) {
+    for (let j = 0; j < canvasSize.height / shapeSize; j++) {
       /* A duplicate of square config with new fillColor Value */
 
       const currentSquareConfig = {
@@ -68,8 +68,8 @@ const setSquares = () => {
 
       // Square(x, y, squareConfig)
       const newSquare = new Square(
-        i * shapesize,
-        j * shapesize,
+        i * shapeSize,
+        j * shapeSize,
         currentSquareConfig
       )
       newSquare.isLit = Math.random() < light.frequancy
