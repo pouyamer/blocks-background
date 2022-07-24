@@ -16,7 +16,7 @@ let config = {
       a: 1
     },
     hasBorders: false,
-    // shapes: "square", "circle", "bowlingPin"
+    // shapes: "square", "circle", "bowlingPin", "chaos"
     shape: "bowlingPin",
     borderColor: {
       h: 340,
