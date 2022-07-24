@@ -1,6 +1,6 @@
 const canvas = document.querySelector(".canvas")
 const ctx = canvas.getContext("2d")
-const { size: canvasSize } = config.canvas
+const { shapesize: canvasSize } = config.canvas
 canvas.width = canvasSize.width
 canvas.height = canvasSize.height
 
@@ -9,11 +9,25 @@ let paused = false
 // An anonymous function that gets the offlight value
 const lightOffColor = (() => {
   const { light, hue, saturation, fillColor } = config.square
+  const setLightOffValue = colorValue => {
+    // colorValue is l, h, or s
+    switch (colorValue.varietyMode) {
+      case "value":
+        return colorValue.value
+      case "range":
+        return colorValue.defaultOnMin
+          ? colorValue.range.min
+          : colorValue.range.max
+      case "values":
+        return Math.min(...colorValue.values)
+    }
+  }
+
   return {
     ...fillColor,
-    l: light.isRanged ? light.range.min : light.value.off,
-    h: hue.isRanged ? hue.range.min : hue.value,
-    s: saturation.isRanged ? saturation.range.min : saturation.value
+    l: setLightOffValue(light),
+    h: setLightOffValue(hue),
+    s: setLightOffValue(saturation)
   }
 })()
 
@@ -21,36 +35,43 @@ let squares = []
 
 // Setting the squares
 const setSquares = () => {
-  const { size, light, hue, fillColor, saturation } = config.square
+  const { shapesize, light, hue, fillColor, saturation } = config.square
 
-  for (let i = 0; i < canvasSize.width / size; i++) {
-    for (let j = 0; j < canvasSize.height / size; j++) {
+  for (let i = 0; i < canvasSize.width / shapesize; i++) {
+    for (let j = 0; j < canvasSize.height / shapesize; j++) {
       /* A duplicate of square config with new fillColor Value */
 
       const currentSquareConfig = {
         ...config.square,
         fillColor: {
           ...fillColor,
-          l: light.isRanged
-            ? light.defaultOnMin
-              ? light.range.min
-              : light.range.max
-            : light.value,
-          h: hue.isRanged
-            ? hue.defaultOnMin
-              ? hue.range.min
-              : hue.range.max
-            : hue.value,
-          s: saturation.isRanged
-            ? saturation.defaultOnMin
-              ? saturation.range.min
-              : saturation.range.max
-            : saturation.value
+          l:
+            light.varietyMode === "range"
+              ? light.defaultOnMin
+                ? light.range.min
+                : light.range.max
+              : light.value,
+          h:
+            hue.varietyMode === "range"
+              ? hue.defaultOnMin
+                ? hue.range.min
+                : hue.range.max
+              : hue.value,
+          s:
+            saturation.varietyMode === "range"
+              ? saturation.defaultOnMin
+                ? saturation.range.min
+                : saturation.range.max
+              : saturation.value
         }
       }
 
       // Square(x, y, squareConfig)
-      const newSquare = new Square(i * size, j * size, currentSquareConfig)
+      const newSquare = new Square(
+        i * shapesize,
+        j * shapesize,
+        currentSquareConfig
+      )
       newSquare.isLit = Math.random() < light.frequancy
 
       squares.push(newSquare)

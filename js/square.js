@@ -146,44 +146,44 @@ class Square {
   }
 
   fill = () => {
-    const { mode, fillColor, size } = this.squareConfig
+    const { shape, fillColor, shapesize } = this.squareConfig
 
     ctx.fillStyle = hslStringify(fillColor)
 
-    if (mode === "bowlingPin" || mode === "square") {
-      ctx.fillRect(this.x, this.y, size, size)
+    if (shape === "bowlingPin" || shape === "square") {
+      ctx.fillRect(this.x, this.y, shapesize, shapesize)
     }
 
-    if (mode === "bowlingPin" || mode === "circle") {
+    if (shape === "bowlingPin" || shape === "circle") {
       ctx.beginPath()
-      ctx.arc(this.x, this.y, size * 0.5, 0, Math.PI * 2)
+      ctx.arc(this.x, this.y, shapesize * 0.5, 0, Math.PI * 2)
       ctx.fill()
     }
   }
 
   stroke = () => {
-    const { mode, borderColor, size } = this.squareConfig
+    const { shape, borderColor, shapesize } = this.squareConfig
     ctx.strokeStyle = hslStringify(borderColor)
 
-    if (mode === "circle") {
+    if (shape === "circle") {
       ctx.beginPath()
-      ctx.arc(this.x, this.y, size * 0.5, 0, Math.PI * 2)
+      ctx.arc(this.x, this.y, shapesize * 0.5, 0, Math.PI * 2)
       ctx.stroke()
       return
     }
 
-    if (mode === "square") {
-      ctx.strokeRect(this.x, this.y, size, size)
+    if (shape === "square") {
+      ctx.strokeRect(this.x, this.y, shapesize, shapesize)
       return
     }
 
-    if (mode === "bowlingPin") {
+    if (shape === "bowlingPin") {
       ctx.beginPath()
-      ctx.arc(this.x, this.y, size * 0.5, 0.5 * Math.PI, Math.PI * 2)
-      ctx.lineTo(this.x + size, this.y)
-      ctx.lineTo(this.x + size, this.y + size)
-      ctx.lineTo(this.x, this.y + size)
-      ctx.lineTo(this.x, this.y + size * 0.5)
+      ctx.arc(this.x, this.y, shapesize * 0.5, 0.5 * Math.PI, Math.PI * 2)
+      ctx.lineTo(this.x + shapesize, this.y)
+      ctx.lineTo(this.x + shapesize, this.y + shapesize)
+      ctx.lineTo(this.x, this.y + shapesize)
+      ctx.lineTo(this.x, this.y + shapesize * 0.5)
       ctx.stroke()
     }
   }
@@ -199,13 +199,13 @@ class Square {
 
     this.draw()
     // If the light is ranged:
-    if (light.isRanged) this.lightOnAndOff()
+    if (light.varietyMode === "range") this.lightOnAndOff()
 
     // This Lights up the squares on run
     // if the light is not ranged:
-    if (!light.isRanged) fillColor.l = light.value
-    if (this.willChangeHue && hue.isRanged) this.hueUpAndDown()
-    if (this.willChangeSaturation && saturation.isRanged)
+    if (light.varietyMode === "value") fillColor.l = light.value
+    if (this.willChangeHue && hue.varietyMode === "range") this.hueUpAndDown()
+    if (this.willChangeSaturation && saturation.varietyMode === "range")
       this.saturateAndDesaturate()
   }
 }

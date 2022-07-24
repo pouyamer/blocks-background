@@ -29,15 +29,37 @@ const updateHamburgerColor = (topColor, bottomColor) => {
 const getTopAndBottomColor = config => {
   const { light, hue, saturation } = config.square
 
-  const lightMinValue = light.isRanged ? light.range.min : light.value
-  const hueMinValue = hue.isRanged ? hue.range.min : hue.value
+  const getMinColorValue = colorValue => {
+    // colorValue is l, h, or s
+    switch (colorValue.varietyMode) {
+      case "value":
+        return colorValue.value
+      case "range":
+        return colorValue.range.min
+      case "values":
+        return Math.min(...colorValue.values)
+    }
+  }
 
-  const lightMaxValue = light.isRanged ? light.range.max : light.value
-  const hueMaxValue = hue.isRanged
-    ? hue.range.max
-    : hue.value
-    ? saturation.range.max
-    : saturation.value
+  const getMaxColorValue = colorValue => {
+    // colorValue is l, h, or s
+    switch (colorValue.varietyMode) {
+      case "value":
+        return colorValue.value
+      case "range":
+        return colorValue.range.max
+      case "values":
+        return Math.max(...colorValue.values)
+    }
+  }
+
+  const lightMinValue = getMinColorValue(light)
+  const hueMinValue = getMinColorValue(hue)
+  const saturationMinValue = getMinColorValue(saturation)
+
+  const lightMaxValue = getMaxColorValue(light)
+  const hueMaxValue = getMaxColorValue(hue)
+  const saturationMaxValue = getMaxColorValue(saturation)
 
   const topColor = invertColor({
     h: hueMinValue,
