@@ -1,4 +1,5 @@
 hueConfig = {
+  name: "hue",
   /*
        if the h value in hsl
         - true: uses the range
@@ -8,13 +9,13 @@ hueConfig = {
   varietyMode: "range",
   range: {
     // Max and Min value of hue is [0 - 360]
-    min: 220,
-    max: 250
+    min: 140,
+    max: 180
   },
   // if varietyMode is "value" then it gets the Value [0 - 360]
-  value: 52,
+  value: 140,
   // if varietyMode is "values" then it gets the Values [0 - 360]
-  values: [52, 53, 54],
+  values: [18, 238],
   //------------------------------
   // rate of decrease / increase
   step: {

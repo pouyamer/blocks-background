@@ -1,4 +1,5 @@
 saturationConfig = {
+  name: "saturation",
   /* 
         if the s value in hsl
           - true: uses the range
@@ -12,9 +13,9 @@ saturationConfig = {
     max: 100
   },
   // if varietyMode is "value" then it gets the Value [0 - 100]
-  value: 20,
+  value: 80,
   // if varietyMode is "values" then it gets the Array of Values [0 - 100]
-  values: [20, 40, 60, 80, 100],
+  values: [70, 82],
   //------------------------------
   // rate of decrease / increase
   step: {
@@ -29,7 +30,7 @@ saturationConfig = {
         (Among the lit squares if boundToLight is true)
         will change the saturation value
       */
-  frequancy: 0.5,
+  frequancy: 1,
   // if true sets the non-selected squares to the min (o.w max) saturation range (if varietyMode is "range")
   defaultOnMin: false
 }

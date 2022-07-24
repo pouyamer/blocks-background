@@ -1,4 +1,5 @@
 lightConfig = {
+  name: "light",
   /* 
       if the l value in hsl
         - true: uses the range
@@ -8,17 +9,17 @@ lightConfig = {
   varietyMode: "range",
   range: {
     // Max and Min value of light is [0 - 100]
-    min: 0,
-    max: 80
+    min: 10,
+    max: 50
   },
   // if varietyMode is "value" then it gets the Value [0 - 100]
-  value: 50,
+  value: 40,
   // if varietyMode is "values" then it gets the Values [0 - 100]
-  values: [50, 60, 70],
+  values: [10, 50],
   // rate of decrease / increase
   step: {
     increase: 5,
-    decrease: 3
+    decrease: 5
   },
   // if true changes the light value on random [0 - incOrDec]
   randomlyChange: true,
