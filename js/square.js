@@ -103,6 +103,28 @@ class Square {
     this.isHueIncreasing ? this.hueUp() : this.hueDown()
   }
 
+  changeValueOnValuesMode = colorValueName => {
+    const { hue, saturation, light, fillColor } = this.squareConfig
+    const colorValue = [hue, saturation, light].find(
+      clrValue => clrValue.name === colorValueName
+    )
+    const { values } = colorValue
+
+    const randomValue = values[Math.floor(Math.random() * values.length)]
+    if (colorValueName === "hue") {
+      fillColor.h = randomValue
+      return
+    }
+    if (colorValueName === "saturation") {
+      fillColor.s = randomValue
+      return
+    }
+    if (colorValueName === "light") {
+      fillColor.l = randomValue
+      return
+    }
+  }
+
   saturate = () => {
     // If RandomlyChange is true, change the hue value on random [0 - incOrDec]
     const { fillColor, saturation } = this.squareConfig
@@ -145,59 +167,68 @@ class Square {
     this.isBecomingSaturated ? this.saturate() : this.desaturate()
   }
 
-  fill = () => {
-    const { shape, fillColor, shapesize } = this.squareConfig
+  fillAndStroke = () => {
+    const { shape, fillColor, shapeSize, hasBorders, borderColor } =
+      this.squareConfig
 
+    ctx.strokeStyle = hslStringify(borderColor)
     ctx.fillStyle = hslStringify(fillColor)
 
-    if (shape === "bowlingPin" || shape === "square") {
-      ctx.fillRect(this.x, this.y, shapesize, shapesize)
+    switch (shape) {
+      case "square":
+        ctx.fillRect(this.x, this.y, shapeSize, shapeSize)
+        hasBorders && ctx.strokeRect(this.x, this.y, shapeSize, shapeSize)
+        break
+
+      case "circle":
+        ctx.beginPath()
+        ctx.arc(this.x, this.y, shapeSize * 0.5, 0, Math.PI * 2)
+        ctx.fill()
+        hasBorders && ctx.stroke()
+        break
+
+      case "bowlingPin":
+        ctx.fillRect(this.x, this.y, shapeSize, shapeSize)
+        ctx.beginPath()
+        ctx.arc(this.x, this.y, shapeSize * 0.5, 0, Math.PI * 2)
+        ctx.fill()
+        if (hasBorders) {
+          ctx.beginPath()
+          ctx.arc(this.x, this.y, shapeSize * 0.5, 0.5 * Math.PI, Math.PI * 2)
+          ctx.lineTo(this.x + shapeSize, this.y)
+          ctx.lineTo(this.x + shapeSize, this.y + shapeSize)
+          ctx.lineTo(this.x, this.y + shapeSize)
+          ctx.lineTo(this.x, this.y + shapeSize * 0.5)
+          ctx.stroke()
+        }
+        break
+
+      case "chaos":
+        const x =
+          this.x + Math.random() * shapeSize - (Math.random() * shapeSize) / 2
+        const y =
+          this.y + Math.random() * shapeSize - (Math.random() * shapeSize) / 2
+        const size = Math.random() * shapeSize
+
+        // fill
+        ctx.fillRect(x, y, size, size)
+
+        // stroke
+        hasBorders && ctx.strokeRect(x, y, size, size)
+        break
     }
-
-    if (shape === "bowlingPin" || shape === "circle") {
-      ctx.beginPath()
-      ctx.arc(this.x, this.y, shapesize * 0.5, 0, Math.PI * 2)
-      ctx.fill()
-    }
-  }
-
-  stroke = () => {
-    const { shape, borderColor, shapesize } = this.squareConfig
-    ctx.strokeStyle = hslStringify(borderColor)
-
-    if (shape === "circle") {
-      ctx.beginPath()
-      ctx.arc(this.x, this.y, shapesize * 0.5, 0, Math.PI * 2)
-      ctx.stroke()
-      return
-    }
-
-    if (shape === "square") {
-      ctx.strokeRect(this.x, this.y, shapesize, shapesize)
-      return
-    }
-
-    if (shape === "bowlingPin") {
-      ctx.beginPath()
-      ctx.arc(this.x, this.y, shapesize * 0.5, 0.5 * Math.PI, Math.PI * 2)
-      ctx.lineTo(this.x + shapesize, this.y)
-      ctx.lineTo(this.x + shapesize, this.y + shapesize)
-      ctx.lineTo(this.x, this.y + shapesize)
-      ctx.lineTo(this.x, this.y + shapesize * 0.5)
-      ctx.stroke()
-    }
-  }
-
-  draw = () => {
-    const { hasBorders } = this.squareConfig
-    this.fill()
-    hasBorders && this.stroke()
   }
 
   update = () => {
     const { light, hue, saturation, fillColor } = this.squareConfig
 
-    this.draw()
+    this.fillAndStroke()
+
+    if (light.varietyMode === "values") this.changeValueOnValuesMode("light")
+    if (hue.varietyMode === "values") this.changeValueOnValuesMode("hue")
+    if (saturation.varietyMode === "values")
+      this.changeValueOnValuesMode("saturation")
+
     // If the light is ranged:
     if (light.varietyMode === "range") this.lightOnAndOff()
 
