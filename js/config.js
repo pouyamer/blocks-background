@@ -10,14 +10,14 @@ let config = {
     hue: hueConfig,
     saturation: saturationConfig,
     light: lightConfig,
-    shapeSize: 20, // Try above 15 for better performence
+    shapeSize: 15, // Try above 15 for better performence
     fillColor: {
       // h, s, l is set once app runs
       a: 1
     },
     hasBorders: false,
     // shapes: "square", "circle", "bowlingPin", "chaos"
-    shape: "bowlingPin",
+    shape: "chaos",
     borderColor: {
       h: 340,
       s: 90,
