@@ -85,7 +85,7 @@ const backgroundColor = hslStringify(lightOffColor)
 let frames = 0
 let time = 0
 
-setInterval(() => {
+let timeElapsedInterval = setInterval(() => {
   time += 0.1
 }, 100)
 
@@ -99,7 +99,11 @@ const render = () => {
   ctx.fillRect(canvasSize.width - 110, 0, 120, 40)
   ctx.fillStyle = "#fff"
   ctx.font = "30px Arial"
-  ctx.fillText(Math.round(frames / time) + " FPS", canvasSize.width - 100, 30)
+  ctx.fillText(
+    Math.round((frames / time) | 0) + " FPS",
+    canvasSize.width - 100,
+    30
+  )
   frames++
 
   // if app is paused then it stops rendering
@@ -120,6 +124,18 @@ render()
 
 canvas.addEventListener("click", () => {
   paused = !paused
+
+  // Reset the timer and frames
+  if (paused) {
+    frames = 0
+    time = 0
+    clearInterval(timeElapsedInterval)
+  } else {
+    timeElapsedInterval = setInterval(() => {
+      time += 0.1
+    }, 100)
+  }
+
   // if app isn't paused then it re-renders
   !paused && render()
 })
