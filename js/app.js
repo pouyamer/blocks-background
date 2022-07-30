@@ -82,10 +82,25 @@ const setSquares = () => {
 // saves the offColor at the start of the app
 const backgroundColor = hslStringify(lightOffColor)
 
+let frames = 0
+let time = 0
+
+setInterval(() => {
+  time += 0.1
+}, 100)
+
 const render = () => {
   squares
     .filter(square => !config.square.boundToLight || square.isLit)
     .forEach(square => square.update())
+
+  // Show frame rate:
+  ctx.fillStyle = "#222"
+  ctx.fillRect(canvasSize.width - 110, 0, 120, 40)
+  ctx.fillStyle = "#fff"
+  ctx.font = "30px Arial"
+  ctx.fillText(Math.round(frames / time) + " FPS", canvasSize.width - 100, 30)
+  frames++
 
   // if app is paused then it stops rendering
   !paused && requestAnimationFrame(render)
