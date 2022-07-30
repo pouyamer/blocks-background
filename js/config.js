@@ -10,7 +10,7 @@ let config = {
     hue: hueConfig,
     saturation: saturationConfig,
     light: lightConfig,
-    shapeSize: 15, // Try above 15 for better performence
+    shapeSize: 30, // Try above 15 for better performence
     fillColor: {
       // h, s, l is set once app runs
       a: 1
