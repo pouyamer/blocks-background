@@ -113,7 +113,7 @@ const render = () => {
 // Main App:
 
 //   First draw the background (It represents the light)
-ctx.fillStyle = hslStringify(lightOffColor)
+ctx.fillStyle = hslStringify(lightOffColor)\
 ctx.fillRect(0, 0, canvasSize.width, canvasSize.height)
 
 //   set the squares
