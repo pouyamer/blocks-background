@@ -1,4 +1,6 @@
 const canvas = document.querySelector(".canvas")
+const elWarning = document.querySelector(".warning")
+const elBtnAgreeWarning = document.querySelector(".btn-agree-warning")
 const ctx = canvas.getContext("2d")
 const { size: canvasSize } = config.canvas
 canvas.width = canvasSize.width
@@ -112,8 +114,36 @@ const render = () => {
 
 // Main App:
 
+//    If !config.accessibility.warning hide warning (NOT RECOMMENDED)
+!config.accessibility.warning && elWarning.remove()
+
+//    If user clicks on continue warning will go away
+elBtnAgreeWarning.addEventListener("click", async () => {
+  const { warningFadeOutDuration } = config.accessibility
+
+  // adds the removed class
+  await new Promise(res => {
+    elWarning.classList.add("removed")
+    elWarning.style.transitionDuration = warningFadeOutDuration + "ms"
+    res()
+  })
+
+  // waits for the fade-out to finish
+  await new Promise(res => {
+    setTimeout(() => {
+      res()
+    }, warningFadeOutDuration)
+  })
+
+  // removes the element from the DOM
+  await new Promise(res => {
+    elWarning.remove()
+    res()
+  })
+})
+
 //   First draw the background (It represents the light)
-ctx.fillStyle = hslStringify(lightOffColor)\
+ctx.fillStyle = hslStringify(lightOffColor)
 ctx.fillRect(0, 0, canvasSize.width, canvasSize.height)
 
 //   set the squares
