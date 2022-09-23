@@ -1,4 +1,9 @@
 let config = {
+  accessibility: {
+    //    If !config.accessibility.warning hide warning (NOT RECOMMENDED)
+    warning: true,
+    warningFadeOutDuration: 1000
+  },
   canvas: canvasConfig,
   square: {
     /*
@@ -17,7 +22,7 @@ let config = {
     },
     hasBorders: false,
     // shapes: "square", "circle", "bowlingPin", "chaos"
-    shape: "chaos",
+    shape: "square",
     borderColor: {
       h: 340,
       s: 90,
