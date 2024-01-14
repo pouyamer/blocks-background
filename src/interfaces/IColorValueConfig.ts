@@ -1,36 +1,39 @@
-hueConfig = {
-  name: "hue",
+interface IColorValueConfig {
+  name: ColorValueNameType
   /*
        if the h value in hsl
         - true: uses the range
         - false: uses the value
       */
   /* varietyModes : "value", "values", "range", "ranges" */
-  varietyMode: "range",
+  varietyMode: VarietyNameType
   range: {
     // Max and Min value of hue is [0 - 360]
-    min: 140,
-    max: 180
-  },
+    min: number
+    max: number
+  }
   // if varietyMode is "value" then it gets the Value [0 - 360]
-  value: 140,
+  value: number
   // if varietyMode is "values" then it gets the Values [0 - 360]
-  values: [18, 238],
+  values: number[]
   //------------------------------
   // rate of decrease / increase
   step: {
-    increase: 1,
-    decrease: 1
-  },
+    increase: number
+    decrease: number
+  }
   // if true changes the hue value on random [0 - incOrDec]
-  randomlyChange: true,
+  randomlyChange: boolean
 
   /*
         Frequency: How many of the squares
         (Among the lit squares if boundToLight is true)
         will change the hue value
       */
-  frequancy: 1,
-  // if true sets the non-selected squares to the min (o.w max) hue range (if varietyMode is "range")
-  defaultOnMin: true
+  frequancy: number
+  // if true sets the non-selected squares to the min (o.w max) saturation range (if varietyMode is "range")
+  defaultOnMin: boolean
+
+  // determine how starting value is selected
+  startOnValue: StartOnValueType
 }

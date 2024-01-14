@@ -1,4 +1,4 @@
-const hslToRgb = hslColor => {
+const hslToRgb = (hslColor: IHslColor) => {
   const h = hslColor.h
   const s = hslColor.s / 100
   const l = hslColor.l / 100
@@ -7,7 +7,7 @@ const hslToRgb = hslColor => {
   const X = C * (1 - Math.abs(((h / 60) % 2) - 1))
   const m = l - C / 2
 
-  const get_rPrime_gPrime_bPrime = (h, C, X) => {
+  const get_rPrime_gPrime_bPrime = (h: number, C: number, X: number) => {
     if (h >= 0 && h < 60) return [C, X, 0]
     if (h < 120) return [X, C, 0]
     if (h < 180) return [0, C, X]
@@ -25,7 +25,7 @@ const hslToRgb = hslColor => {
   }
 }
 
-const rgbToHsl = rgbColor => {
+const rgbToHsl = (rgbColor: IRgbColor) => {
   const { r, g, b } = rgbColor
 
   const rPrime = r / 255
@@ -37,14 +37,21 @@ const rgbToHsl = rgbColor => {
 
   const delta = cMax - cMin
 
-  const calculateHue = (rPrime, gPrime, bPrime, delta) => {
+  const calculateHue = (
+    rPrime: number,
+    gPrime: number,
+    bPrime: number,
+    delta: number
+  ) => {
     if (delta === 0) return 0
     if (rPrime === cMax) return 60 * (((gPrime - bPrime) / delta) % 6)
     if (gPrime === cMax) return 60 * ((bPrime - rPrime) / delta + 2)
     if (bPrime === cMax) return 60 * ((rPrime - gPrime) / delta + 4)
+
+    throw new Error()
   }
 
-  const calculateSaturation = (delta, l) => {
+  const calculateSaturation = (delta: number, l: number) => {
     return delta === 0 ? 0 : delta / (1 - Math.abs(2 * l - 1))
   }
 
@@ -63,7 +70,7 @@ const rgbToHsl = rgbColor => {
   }
 }
 
-const invertColor = hslColor => {
+const invertColor = (hslColor: IHslColor) => {
   const rgbColor = hslToRgb(hslColor)
   const { r, g, b } = rgbColor
   return rgbToHsl({
@@ -73,9 +80,10 @@ const invertColor = hslColor => {
   })
 }
 
-const hslStringify = color => {
+const hslStringify = (color: IHslColor) => {
   const { h, s, l, a } = color
   return `hsl(${h}, ${s}%, ${l}%, ${a})`
 }
 
-const randBetween = (min, max) => Math.random() * (max - min + 1) + min
+const randBetween = (min: number, max: number) =>
+  Math.random() * (max - min + 1) + min

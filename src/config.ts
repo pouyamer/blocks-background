@@ -1,33 +1,34 @@
-let config = {
+let config: IConfig = {
   accessibility: {
     //    If !config.accessibility.warning hide warning (NOT RECOMMENDED)
-    warning: true,
-    warningFadeOutDuration: 1000
+    warning: false,
+    warningFadeOutDuration: 300,
+    showFramesPerSecond: true
   },
-  canvas: canvasConfig,
+  canvas: { size: { width: innerWidth, height: innerHeight } },
   square: {
     /*
      if boundToLight is true,
      hue and saturation will change on squares
      that are lit.
     */
-    boundToLight: true,
+    boundToLight: false,
     hue: hueConfig,
     saturation: saturationConfig,
     light: lightConfig,
-    shapeSize: 30, // Try above 15 for better performence
+    shapeSize: 20, // Try above 15 for better performence
     fillColor: {
       // h, s, l is set once app runs
       a: 1
     },
-    hasBorders: false,
+    hasBorders: true,
     // shapes: "square", "circle", "bowlingPin", "chaos"
     shape: "square",
     borderColor: {
       h: 340,
       s: 90,
       l: 0,
-      a: 0.5
+      a: 0.1
     }
   },
   settings: {}

@@ -1,7 +1,9 @@
-const canvas = document.querySelector(".canvas")
-const elWarning = document.querySelector(".warning")
-const elBtnAgreeWarning = document.querySelector(".btn-agree-warning")
-const ctx = canvas.getContext("2d")
+const canvas = document.querySelector(".canvas") as HTMLCanvasElement
+const elWarning = document.querySelector(".warning") as HTMLDivElement
+const elBtnAgreeWarning = document.querySelector(
+  ".btn-agree-warning"
+) as HTMLButtonElement
+const ctx = canvas.getContext("2d") as CanvasRenderingContext2D
 const { size: canvasSize } = config.canvas
 canvas.width = canvasSize.width
 canvas.height = canvasSize.height
@@ -11,7 +13,7 @@ let paused = false
 // An anonymous function that gets the offlight value
 const lightOffColor = (() => {
   const { light, hue, saturation, fillColor } = config.square
-  const setLightOffValue = colorValue => {
+  const setLightOffValue = (colorValue: IColorValueConfig) => {
     // colorValue is l, h, or s
     switch (colorValue.varietyMode) {
       case "value":
@@ -22,6 +24,8 @@ const lightOffColor = (() => {
           : colorValue.range.max
       case "values":
         return Math.min(...colorValue.values)
+      default:
+        throw new Error()
     }
   }
 
@@ -33,48 +37,18 @@ const lightOffColor = (() => {
   }
 })()
 
-let squares = []
+let squares: Square[] = []
 
 // Setting the squares
 const setSquares = () => {
-  const { shapeSize, light, hue, fillColor, saturation } = config.square
+  const { shapeSize } = config.square
 
   for (let i = 0; i < canvasSize.width / shapeSize; i++) {
     for (let j = 0; j < canvasSize.height / shapeSize; j++) {
       /* A duplicate of square config with new fillColor Value */
 
-      const currentSquareConfig = {
-        ...config.square,
-        fillColor: {
-          ...fillColor,
-          l:
-            light.varietyMode === "range"
-              ? light.defaultOnMin
-                ? light.range.min
-                : light.range.max
-              : light.value,
-          h:
-            hue.varietyMode === "range"
-              ? hue.defaultOnMin
-                ? hue.range.min
-                : hue.range.max
-              : hue.value,
-          s:
-            saturation.varietyMode === "range"
-              ? saturation.defaultOnMin
-                ? saturation.range.min
-                : saturation.range.max
-              : saturation.value
-        }
-      }
-
       // Square(x, y, squareConfig)
-      const newSquare = new Square(
-        i * shapeSize,
-        j * shapeSize,
-        currentSquareConfig
-      )
-      newSquare.isLit = Math.random() < light.frequancy
+      const newSquare = new Square(i * shapeSize, j * shapeSize, config, i, j)
 
       squares.push(newSquare)
     }
@@ -84,7 +58,7 @@ const setSquares = () => {
 // saves the offColor at the start of the app
 const backgroundColor = hslStringify(lightOffColor)
 
-let frames = 0
+let totalFrames = 0
 let time = 0
 
 let timeElapsedInterval = setInterval(() => {
@@ -93,20 +67,25 @@ let timeElapsedInterval = setInterval(() => {
 
 const render = () => {
   squares
-    .filter(square => !config.square.boundToLight || square.isLit)
-    .forEach(square => square.update())
+    .filter(
+      square => !square.squareConfig.boundToLight || square.squareConfig.isLit
+    )
+    .forEach(square => square.update(ctx))
 
   // Show frame rate:
-  ctx.fillStyle = "#222"
-  ctx.fillRect(canvasSize.width - 110, 0, 120, 40)
-  ctx.fillStyle = "#fff"
-  ctx.font = "30px Arial"
-  ctx.fillText(
-    Math.round((frames / time) | 0) + " FPS",
-    canvasSize.width - 100,
-    30
-  )
-  frames++
+  if (config.accessibility.showFramesPerSecond) {
+    ctx.fillStyle = "#222"
+    ctx.fillRect(canvasSize.width - 110, 0, 120, 40)
+    ctx.fillStyle = "#fff"
+    ctx.font = "30px Arial"
+
+    ctx.fillText(
+      Math.round((totalFrames / time) | 0) + " FPS",
+      canvasSize.width - 100,
+      30
+    )
+    totalFrames++
+  }
 
   // if app is paused then it stops rendering
   !paused && requestAnimationFrame(render)
@@ -122,21 +101,22 @@ elBtnAgreeWarning.addEventListener("click", async () => {
   const { warningFadeOutDuration } = config.accessibility
 
   // adds the removed class
-  await new Promise(res => {
+
+  await new Promise((res: Function) => {
     elWarning.classList.add("removed")
     elWarning.style.transitionDuration = warningFadeOutDuration + "ms"
     res()
   })
 
   // waits for the fade-out to finish
-  await new Promise(res => {
+  await new Promise((res: Function) => {
     setTimeout(() => {
       res()
     }, warningFadeOutDuration)
   })
 
   // removes the element from the DOM
-  await new Promise(res => {
+  await new Promise((res: Function) => {
     elWarning.remove()
     res()
   })
@@ -157,7 +137,7 @@ canvas.addEventListener("click", () => {
 
   // Reset the timer and frames
   if (paused) {
-    frames = 0
+    totalFrames = 0
     time = 0
     clearInterval(timeElapsedInterval)
   } else {
@@ -171,7 +151,8 @@ canvas.addEventListener("click", () => {
 })
 
 window.addEventListener("resize", () => {
-  canvas.width = canvasSize.width
-  canvas.height = canvasSize.height
-  window.location.reload()
+  canvas.width = parseInt(getComputedStyle(document.body).width.split("px")[0])
+  canvas.height = parseInt(
+    getComputedStyle(document.body).height.split("px")[0]
+  )
 })
