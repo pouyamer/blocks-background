@@ -2,8 +2,8 @@ let config: IConfig = {
   accessibility: {
     //    If !config.accessibility.warning hide warning (NOT RECOMMENDED)
     warning: false,
-    warningFadeOutDuration: 300,
-    showFramesPerSecond: true
+    warningFadeOutDuration: 1000,
+    showFramesPerSecond: false
   },
   canvas: { size: { width: innerWidth, height: innerHeight } },
   square: {
@@ -21,9 +21,22 @@ let config: IConfig = {
       // h, s, l is set once app runs
       a: 1
     },
-    hasBorders: true,
-    // shapes: "square", "circle", "bowlingPin", "chaos"
-    shape: "square",
+    hasBorders: false,
+    shape: "innerRectangle",
+    innerRectangleMode: {
+      frequency: 1,
+      startingPosition: "random",
+      forceSquare: false,
+      borderOnFullShapeSize: true,
+      rectangleFractionToFullShapeWidth: {
+        min: 0,
+        max: 1
+      },
+      rectangleFractionToFullShapeHeight: {
+        min: 0,
+        max: 1
+      }
+    },
     borderColor: {
       h: 340,
       s: 90,

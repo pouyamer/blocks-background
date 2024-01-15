@@ -22,8 +22,29 @@ interface IConfig {
       a: number
     }
     hasBorders: boolean
-    // shapes: "square", "circle", "bowlingPin", "chaos"
+    // shapes: "square", "circle", "bowlingPin", "chaos", ...
     shape: ShapeType
+
+    innerRectangleMode: {
+      // frequency [0 - 1] in which the blocks get repainted (in innerRectangle mode)
+      frequency: number
+
+      startingPosition: startingPositionType
+      // if set to true it shape width === height
+      forceSquare: boolean
+
+      // if true => border will get on
+      //            shapeSize set in config file
+      // if false => border will get on
+      //             new shape
+      borderOnFullShapeSize: boolean
+
+      // min and max values that width and height of the rectangle to shapeSize square
+      // if (forceSquare => true)
+      //     gets both from width
+      rectangleFractionToFullShapeWidth: IRange
+      rectangleFractionToFullShapeHeight: IRange
+    }
     borderColor: {
       h: number
       s: number

@@ -289,8 +289,7 @@ class Square implements ISquare {
   }
 
   fillAndStroke = (ctx: CanvasRenderingContext2D) => {
-    const { shape, fillColor, shapeSize, hasBorders, borderColor } =
-      this.squareConfig
+    const { shape, fillColor, borderColor } = this.squareConfig
 
     ctx.strokeStyle = hslStringify(
       borderColor || {
@@ -304,45 +303,23 @@ class Square implements ISquare {
 
     switch (shape) {
       case "square":
-        ctx.fillRect(this.x, this.y, shapeSize, shapeSize)
-        hasBorders && ctx.strokeRect(this.x, this.y, shapeSize, shapeSize)
+        this.drawInSquareMode(ctx)
         break
 
       case "circle":
-        ctx.beginPath()
-        ctx.arc(this.x, this.y, shapeSize * 0.5, 0, Math.PI * 2)
-        ctx.fill()
-        hasBorders && ctx.stroke()
+        this.drawInCircleMode(ctx)
         break
 
       case "bowlingPin":
-        ctx.fillRect(this.x, this.y, shapeSize, shapeSize)
-        ctx.beginPath()
-        ctx.arc(this.x, this.y, shapeSize * 0.5, 0, Math.PI * 2)
-        ctx.fill()
-        if (hasBorders) {
-          ctx.beginPath()
-          ctx.arc(this.x, this.y, shapeSize * 0.5, 0.5 * Math.PI, Math.PI * 2)
-          ctx.lineTo(this.x + shapeSize, this.y)
-          ctx.lineTo(this.x + shapeSize, this.y + shapeSize)
-          ctx.lineTo(this.x, this.y + shapeSize)
-          ctx.lineTo(this.x, this.y + shapeSize * 0.5)
-          ctx.stroke()
-        }
+        this.drawInBowlingPinMode(ctx)
         break
 
       case "chaos":
-        const x =
-          this.x + Math.random() * shapeSize - (Math.random() * shapeSize) / 2
-        const y =
-          this.y + Math.random() * shapeSize - (Math.random() * shapeSize) / 2
-        const size = Math.random() * shapeSize
+        this.drawInChaosMode(ctx)
+        break
 
-        // fill
-        ctx.fillRect(x, y, size, size)
-
-        // stroke
-        hasBorders && ctx.strokeRect(x, y, size, size)
+      case "innerRectangle":
+        this.drawInInnerRectangleMode(ctx)
         break
     }
   }
@@ -374,6 +351,156 @@ class Square implements ISquare {
       saturation.varietyMode === "range"
     ) {
       this.saturateAndDesaturate()
+    }
+  }
+
+  drawInSquareMode = (ctx: CanvasRenderingContext2D) => {
+    const { shapeSize, hasBorders } = this.appConfig.square
+
+    ctx.fillRect(this.x, this.y, shapeSize, shapeSize)
+
+    hasBorders && ctx.strokeRect(this.x, this.y, shapeSize, shapeSize)
+  }
+
+  drawInCircleMode = (ctx: CanvasRenderingContext2D) => {
+    const { shapeSize, hasBorders } = this.appConfig.square
+
+    ctx.beginPath()
+    ctx.arc(
+      this.x + shapeSize * 0.5,
+      this.y + shapeSize * 0.5,
+      shapeSize * 0.5,
+      0,
+      Math.PI * 2
+    )
+    ctx.fill()
+    hasBorders && ctx.stroke()
+  }
+
+  drawInBowlingPinMode = (ctx: CanvasRenderingContext2D) => {
+    const { shapeSize, hasBorders } = this.appConfig.square
+
+    ctx.fillRect(this.x, this.y, shapeSize, shapeSize)
+    ctx.beginPath()
+    ctx.arc(this.x, this.y, shapeSize * 0.5, 0, Math.PI * 2)
+    ctx.fill()
+    if (hasBorders) {
+      ctx.beginPath()
+      ctx.arc(this.x, this.y, shapeSize * 0.5, 0.5 * Math.PI, Math.PI * 2)
+      ctx.lineTo(this.x + shapeSize, this.y)
+      ctx.lineTo(this.x + shapeSize, this.y + shapeSize)
+      ctx.lineTo(this.x, this.y + shapeSize)
+      ctx.lineTo(this.x, this.y + shapeSize * 0.5)
+      ctx.stroke()
+    }
+  }
+
+  drawInChaosMode = (ctx: CanvasRenderingContext2D) => {
+    const { shapeSize, hasBorders } = this.appConfig.square
+
+    const x =
+      this.x + Math.random() * shapeSize - (Math.random() * shapeSize) / 2
+    const y =
+      this.y + Math.random() * shapeSize - (Math.random() * shapeSize) / 2
+    const size = Math.random() * shapeSize
+
+    // fill
+    ctx.fillRect(x, y, size, size)
+
+    // stroke
+    hasBorders && ctx.strokeRect(x, y, size, size)
+  }
+
+  drawInInnerRectangleMode = (ctx: CanvasRenderingContext2D) => {
+    const getShapeStartingPosition = (
+      startingPosition: startingPositionType,
+      containerSize: number,
+      shapeWidth: number,
+      shapeHeight: number
+    ): [number, number] => {
+      const left = this.x
+      const right = this.x - shapeWidth + containerSize
+      const centerX = this.x + containerSize / 2 - shapeWidth / 2
+      const centerY = this.y + containerSize / 2 - shapeHeight / 2
+      const top = this.y
+      const bottom = this.y - shapeHeight + containerSize
+
+      // it returns [x, y]
+      switch (startingPosition) {
+        case "top-left":
+          return [left, top]
+
+        case "top-right":
+          return [right, top]
+
+        case "bottom-left":
+          return [left, bottom]
+
+        case "bottom-right":
+          return [right, bottom]
+
+        case "center":
+          return [centerX, centerY]
+
+        case "left":
+          return [left, centerY]
+
+        case "right":
+          return [right, centerY]
+
+        case "top":
+          return [centerX, top]
+
+        case "bottom":
+          return [centerX, bottom]
+        case "random":
+          return [randBetween(left, right), randBetween(top, bottom)]
+      }
+    }
+
+    const {
+      frequency: partPaintFrequency,
+      startingPosition: partPaintStartingPosition,
+      forceSquare,
+      borderOnFullShapeSize,
+      rectangleFractionToFullShapeWidth: { min: minRFW, max: maxRFW },
+      rectangleFractionToFullShapeHeight: { min: minRFH, max: maxRFH }
+    } = this.appConfig.square.innerRectangleMode
+
+    const { shapeSize, hasBorders } = this.appConfig.square
+
+    const shapeWidth = shapeSize * randBetween(minRFW, maxRFW)
+
+    const shapeHeight = forceSquare
+      ? shapeWidth
+      : shapeSize * randBetween(minRFH, maxRFH)
+
+    const [shapeStartingPointX, shapeStartingPointY] = getShapeStartingPosition(
+      partPaintStartingPosition,
+      shapeSize,
+      shapeWidth,
+      shapeHeight
+    )
+
+    if (Math.random() < partPaintFrequency) {
+      ctx.fillRect(
+        shapeStartingPointX,
+        shapeStartingPointY,
+        shapeWidth,
+        shapeHeight
+      )
+      hasBorders &&
+        !borderOnFullShapeSize &&
+        ctx.strokeRect(
+          shapeStartingPointX,
+          shapeStartingPointY,
+          shapeWidth,
+          shapeHeight
+        )
+    }
+
+    if (borderOnFullShapeSize && hasBorders) {
+      ctx.strokeRect(this.x, this.y, shapeSize, shapeSize)
     }
   }
 }

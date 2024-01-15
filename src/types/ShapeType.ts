@@ -1,1 +1,1 @@
-type ShapeType = "square" | "circle" | "bowlingPin" | "chaos"
+type ShapeType = "square" | "circle" | "bowlingPin" | "chaos" | "innerRectangle"
