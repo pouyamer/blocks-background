@@ -85,5 +85,6 @@ const hslStringify = (color: IHslColor) => {
   return `hsl(${h}, ${s}%, ${l}%, ${a})`
 }
 
-const randBetween = (min: number, max: number) =>
-  Math.random() * (max - min + 1) + min
+const randBetween = (min: number, max: number) => {
+  return Math.random() * (max - min) + min
+}
