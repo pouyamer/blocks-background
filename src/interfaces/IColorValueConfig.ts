@@ -7,11 +7,8 @@ interface IColorValueConfig {
       */
   /* varietyModes : "value", "values", "range", "ranges" */
   varietyMode: VarietyNameType
-  range: {
-    // Max and Min value of hue is [0 - 360]
-    min: number
-    max: number
-  }
+  // Max and Min value of hue is [0 - 360]
+  range: IRange
   // if varietyMode is "value" then it gets the Value [0 - 360]
   value: number
   // if varietyMode is "values" then it gets the Values [0 - 360]
