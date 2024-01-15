@@ -6,11 +6,11 @@ const hueConfig: IColorValueConfig = {
         - false: uses the value
       */
   /* varietyModes : "value", "values", "range", "ranges" */
-  varietyMode: "range",
+  varietyMode: "value",
   range: {
     // Max and Min value of hue is [0 - 360]
-    min: 120,
-    max: 130
+    min: 0,
+    max: 200
   },
   // if varietyMode is "value" then it gets the Value [0 - 360]
   value: 140,
@@ -19,8 +19,8 @@ const hueConfig: IColorValueConfig = {
   //------------------------------
   // rate of decrease / increase
   step: {
-    increase: 2,
-    decrease: 3
+    increase: 1,
+    decrease: 1
   },
   // if true changes the hue value on random [0 - incOrDec]
   randomlyChange: true,
