@@ -9,7 +9,7 @@ const lightConfig: IColorValueConfig = {
   range: {
     // Max and Min value of light is [0 - 100]
     min: 20,
-    max: 55
+    max: 75
   },
   // if varietyMode is "value" then it gets the Value [0 - 100]
   value: 60,
@@ -17,8 +17,8 @@ const lightConfig: IColorValueConfig = {
   values: [20, 40, 50],
   // rate of decrease / increase
   step: {
-    increase: 4,
-    decrease: 4
+    increase: 10,
+    decrease: 10
   },
   // if true changes the light value on random [0 - incOrDec]
   randomlyChange: true,
@@ -26,5 +26,5 @@ const lightConfig: IColorValueConfig = {
   frequancy: 1,
   // if true, the light value will be on the min (o.w max) light range (if varietyMode is "range")
   defaultOnMin: true,
-  startOnValue: "min"
+  startOnValue: "random"
 }
