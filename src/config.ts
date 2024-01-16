@@ -22,9 +22,7 @@ let config: IConfig = {
     // Try above 15 for better performence
     shapeSize: 20,
     // h, s, l is set once app runs
-    fillColor: {
-      a: 1
-    },
+    alpha: 1,
     hasBorders: true,
     shape: "innerRectangle",
     innerRectangleMode: {
@@ -53,6 +51,12 @@ let config: IConfig = {
       s: 90,
       l: 0,
       a: 0.1
+    },
+    offColor: {
+      h: 20,
+      s: 65,
+      l: 85,
+      a: 1
     }
   },
   settings: {}

@@ -10,39 +10,19 @@ canvas.height = canvasSize.height
 
 let paused = false
 
-// An anonymous function that gets the offlight value
-const lightOffColor = (() => {
-  const { light, hue, saturation, fillColor } = config.square
-  const setLightOffValue = (colorValue: IColorValueConfig) => {
-    // colorValue is l, h, or s
-    switch (colorValue.varietyMode) {
-      case "value":
-        return colorValue.value
-      case "range":
-        return colorValue.defaultOnMin
-          ? colorValue.range.min
-          : colorValue.range.max
-      case "values":
-        return Math.min(...colorValue.values)
-      default:
-        throw new Error()
-    }
-  }
+const { offColor: _offColor, shapeSize } = config.square
 
-  return {
-    ...fillColor,
-    l: setLightOffValue(light),
-    h: setLightOffValue(hue),
-    s: setLightOffValue(saturation)
-  }
-})()
+const offColor = new HslColor(
+  _offColor.h,
+  _offColor.s,
+  _offColor.l,
+  _offColor.a
+)
 
 let squares: Square[] = []
 
 // Setting the squares
 const setSquares = () => {
-  const { shapeSize } = config.square
-
   for (let i = 0; i < canvasSize.width / shapeSize; i++) {
     for (let j = 0; j < canvasSize.height / shapeSize; j++) {
       /* A duplicate of square config with new fillColor Value */
@@ -56,7 +36,7 @@ const setSquares = () => {
 }
 
 // saves the offColor at the start of the app
-const backgroundColor = hslStringify(lightOffColor)
+const backgroundColor = offColor.toString()
 
 let totalFrames = 0
 let time = 0
@@ -68,7 +48,7 @@ const render = () => {
   if (clearAfterEachFrame) {
     ctx.clearRect(0, 0, canvasSize.width, canvasSize.height)
     //   First draw the background (It represents the light)
-    ctx.fillStyle = hslStringify(lightOffColor)
+    ctx.fillStyle = offColor.toString()
     ctx.fillRect(0, 0, canvasSize.width, canvasSize.height)
   }
 
@@ -98,7 +78,7 @@ const render = () => {
 
 // Main App:
 //   First draw of background
-ctx.fillStyle = hslStringify(lightOffColor)
+ctx.fillStyle = offColor.toString()
 ctx.fillRect(0, 0, canvasSize.width, canvasSize.height)
 
 //    If !config.accessibility.warning hide warning (NOT RECOMMENDED)

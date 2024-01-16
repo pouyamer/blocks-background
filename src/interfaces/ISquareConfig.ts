@@ -1,10 +1,10 @@
 interface ISquareConfig {
-  fillColor: IHslColor
+  fillColor: HslColor
   boundToLight: boolean
   shapeSize: number
   hasBorders: boolean
   shape: ShapeType
-  borderColor?: IHslColor
+  borderColor?: HslColor
   willChangeHue: boolean
   willChangeSaturation: boolean
   isTurningOn: boolean

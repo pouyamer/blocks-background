@@ -16,11 +16,11 @@ interface IConfig {
     hue: IColorValueConfig
     saturation: IColorValueConfig
     light: IColorValueConfig
-    shapeSize: number // Try above 15 for better performence
-    fillColor: {
-      // h, s, l is set once app runs
-      a: number
-    }
+    // Try above 15 for better performence
+    shapeSize: number
+    // h, s, l is set once app runs
+    alpha: number
+
     hasBorders: boolean
     // shapes: "square", "circle", "bowlingPin", "chaos", ...
     shape: ShapeType
@@ -51,12 +51,8 @@ interface IConfig {
       sideCount: IRange
     }
 
-    borderColor: {
-      h: number
-      s: number
-      l: number
-      a: number
-    }
+    borderColor: IHslColor
+    offColor: IHslColor
   }
   settings: {}
 }

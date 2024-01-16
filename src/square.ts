@@ -17,23 +17,34 @@ class Square implements ISquare {
     this.rowIndex = rowIndex
     this.appConfig = appConfig
 
-    const { hue, saturation, light, boundToLight } = this.appConfig.square
+    const {
+      hue,
+      saturation,
+      light,
+      alpha,
+      boundToLight,
+      borderColor,
+      shape,
+      shapeSize
+    } = this.appConfig.square
 
     this.squareConfig = {
-      fillColor: {
-        h: this.determineStartingColorValue("hue", hue.startOnValue),
-        s: this.determineStartingColorValue(
-          "saturation",
-          saturation.startOnValue
-        ),
-        l: this.determineStartingColorValue("light", light.startOnValue),
-        a: this.appConfig.square.fillColor.a
-      },
-      boundToLight: this.appConfig.square.boundToLight,
+      fillColor: new HslColor(
+        this.determineStartingColorValue("hue", hue.startOnValue),
+        this.determineStartingColorValue("saturation", saturation.startOnValue),
+        this.determineStartingColorValue("light", light.startOnValue),
+        alpha
+      ),
+      boundToLight: boundToLight,
       hasBorders: this.appConfig.square.hasBorders,
-      shape: this.appConfig.square.shape,
-      shapeSize: this.appConfig.square.shapeSize,
-      borderColor: this.appConfig.square.borderColor,
+      shape,
+      shapeSize,
+      borderColor: new HslColor(
+        borderColor.h,
+        borderColor.s,
+        borderColor.l,
+        borderColor.a
+      ),
       willChangeHue: Math.random() < hue.frequancy,
       willChangeSaturation: Math.random() < saturation.frequancy,
       isTurningOn: true,
@@ -41,7 +52,7 @@ class Square implements ISquare {
       isBecomingSaturated: true,
 
       // it'll be set once the app runs
-      isLit: Math.random() < this.appConfig.square.light.frequancy
+      isLit: Math.random() < light.frequancy
     }
 
     const { isLit: isSquareLit } = this.squareConfig
@@ -291,15 +302,12 @@ class Square implements ISquare {
   fillAndStroke = (ctx: CanvasRenderingContext2D) => {
     const { shape, fillColor, borderColor } = this.squareConfig
 
-    ctx.strokeStyle = hslStringify(
-      borderColor || {
-        h: 0,
-        s: 0,
-        l: 0,
-        a: 0
-      }
-    )
-    ctx.fillStyle = hslStringify(fillColor)
+    if (!borderColor) {
+      throw new Error()
+    }
+
+    ctx.strokeStyle = borderColor.toString()
+    ctx.fillStyle = fillColor.toString()
 
     switch (shape) {
       case "square":
@@ -325,6 +333,8 @@ class Square implements ISquare {
       case "innerPolygon":
         this.drawInInnerPolygon(ctx)
         break
+
+      // TODO: make innerPolygon mode correctly make a polygon
     }
   }
 
