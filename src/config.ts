@@ -5,23 +5,27 @@ let config: IConfig = {
     warningFadeOutDuration: 1000,
     showFramesPerSecond: false
   },
-  canvas: { size: { width: innerWidth, height: innerHeight } },
+  canvas: {
+    size: { width: innerWidth, height: innerHeight },
+    clearAfterEachFrame: false
+  },
   square: {
     /*
      if boundToLight is true,
      hue and saturation will change on squares
      that are lit.
     */
-    boundToLight: false,
+    boundToLight: true,
     hue: hueConfig,
     saturation: saturationConfig,
     light: lightConfig,
-    shapeSize: 20, // Try above 15 for better performence
+    // Try above 15 for better performence
+    shapeSize: 20,
+    // h, s, l is set once app runs
     fillColor: {
-      // h, s, l is set once app runs
       a: 1
     },
-    hasBorders: false,
+    hasBorders: true,
     shape: "innerRectangle",
     innerRectangleMode: {
       frequency: 1,
@@ -29,12 +33,19 @@ let config: IConfig = {
       forceSquare: false,
       borderOnFullShapeSize: true,
       rectangleFractionToFullShapeWidth: {
-        min: 0,
+        min: 0.5,
         max: 1
       },
       rectangleFractionToFullShapeHeight: {
-        min: 0,
+        min: 0.5,
         max: 1
+      }
+    },
+
+    innerPolygonMode: {
+      sideCount: {
+        min: 4,
+        max: 4
       }
     },
     borderColor: {
