@@ -4,7 +4,7 @@ const elBtnAgreeWarning = document.querySelector(
   ".btn-agree-warning"
 ) as HTMLButtonElement
 const ctx = canvas.getContext("2d") as CanvasRenderingContext2D
-const { size: canvasSize } = config.canvas
+const { size: canvasSize, clearAfterEachFrame } = config.canvas
 canvas.width = canvasSize.width
 canvas.height = canvasSize.height
 
@@ -64,8 +64,14 @@ let time = 0
 let timeElapsedInterval = setInterval(() => {
   time += 0.1
 }, 100)
-
 const render = () => {
+  if (clearAfterEachFrame) {
+    ctx.clearRect(0, 0, canvasSize.width, canvasSize.height)
+    //   First draw the background (It represents the light)
+    ctx.fillStyle = hslStringify(lightOffColor)
+    ctx.fillRect(0, 0, canvasSize.width, canvasSize.height)
+  }
+
   squares
     .filter(
       square => !square.squareConfig.boundToLight || square.squareConfig.isLit
@@ -87,11 +93,13 @@ const render = () => {
     totalFrames++
   }
 
-  // if app is paused then it stops rendering
   !paused && requestAnimationFrame(render)
 }
 
 // Main App:
+//   First draw of background
+ctx.fillStyle = hslStringify(lightOffColor)
+ctx.fillRect(0, 0, canvasSize.width, canvasSize.height)
 
 //    If !config.accessibility.warning hide warning (NOT RECOMMENDED)
 !config.accessibility.warning && elWarning.remove()
@@ -122,10 +130,6 @@ elBtnAgreeWarning.addEventListener("click", async () => {
   })
 })
 
-//   First draw the background (It represents the light)
-ctx.fillStyle = hslStringify(lightOffColor)
-ctx.fillRect(0, 0, canvasSize.width, canvasSize.height)
-
 //   set the squares
 setSquares()
 
@@ -150,9 +154,4 @@ canvas.addEventListener("click", () => {
   !paused && render()
 })
 
-window.addEventListener("resize", () => {
-  canvas.width = parseInt(getComputedStyle(document.body).width.split("px")[0])
-  canvas.height = parseInt(
-    getComputedStyle(document.body).height.split("px")[0]
-  )
-})
+window.addEventListener("resize", () => {})
