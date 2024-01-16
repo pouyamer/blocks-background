@@ -3,4 +3,5 @@ interface ICanvasConfig {
     width: number
     height: number
   }
+  clearAfterEachFrame: boolean
 }
