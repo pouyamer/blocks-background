@@ -45,6 +45,12 @@ interface IConfig {
       rectangleFractionToFullShapeWidth: IRange
       rectangleFractionToFullShapeHeight: IRange
     }
+
+    innerPolygonMode: {
+      // side count of said Polygon (>3)
+      sideCount: IRange
+    }
+
     borderColor: {
       h: number
       s: number
