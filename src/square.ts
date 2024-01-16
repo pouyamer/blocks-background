@@ -321,6 +321,10 @@ class Square implements ISquare {
       case "innerRectangle":
         this.drawInInnerRectangleMode(ctx)
         break
+
+      case "innerPolygon":
+        this.drawInInnerPolygon(ctx)
+        break
     }
   }
 
@@ -425,6 +429,9 @@ class Square implements ISquare {
       const top = this.y
       const bottom = this.y - shapeHeight + containerSize
 
+      const all3PossibleShapeStartingPositions_X = [left, right, centerX]
+      const all3PossibleShapeStartingPositions_Y = [top, bottom, centerY]
+
       // it returns [x, y]
       switch (startingPosition) {
         case "top-left":
@@ -455,6 +462,45 @@ class Square implements ISquare {
           return [centerX, bottom]
         case "random":
           return [randBetween(left, right), randBetween(top, bottom)]
+
+        case "randomFrom9Positions":
+          return [
+            all3PossibleShapeStartingPositions_X[Math.round(randBetween(0, 2))],
+            all3PossibleShapeStartingPositions_Y[Math.round(randBetween(0, 2))]
+          ]
+
+        case "xAxis":
+          return [
+            all3PossibleShapeStartingPositions_X[Math.round(randBetween(0, 1))],
+            centerY
+          ]
+        case "yAxis":
+          return [
+            centerX,
+            all3PossibleShapeStartingPositions_Y[Math.round(randBetween(0, 1))]
+          ]
+
+        case "diagonal":
+          return [
+            all3PossibleShapeStartingPositions_X[Math.round(randBetween(0, 1))],
+            all3PossibleShapeStartingPositions_Y[Math.round(randBetween(0, 1))]
+          ]
+
+        case "unbound":
+          return [
+            Math.random() * this.appConfig.canvas.size.width,
+            Math.random() * this.appConfig.canvas.size.height
+          ]
+        case "unboundX":
+          return [
+            Math.random() * this.appConfig.canvas.size.width,
+            all3PossibleShapeStartingPositions_Y[Math.round(randBetween(0, 2))]
+          ]
+        case "unboundY":
+          return [
+            all3PossibleShapeStartingPositions_X[Math.round(randBetween(0, 2))],
+            Math.random() * this.appConfig.canvas.size.height
+          ]
       }
     }
 
@@ -502,5 +548,45 @@ class Square implements ISquare {
     if (borderOnFullShapeSize && hasBorders) {
       ctx.strokeRect(this.x, this.y, shapeSize, shapeSize)
     }
+  }
+
+  drawInInnerPolygon = (ctx: CanvasRenderingContext2D) => {
+    const { shapeSize: containerSize, hasBorders } = this.appConfig.square
+
+    const { min: sideCountMin, max: sideCountMax } =
+      this.appConfig.square.innerPolygonMode.sideCount
+
+    const sideCount = Math.round(randBetween(sideCountMin, sideCountMax))
+
+    const boundLeft = this.x
+    const boundRight = this.x + containerSize
+    const boundTop = this.y
+    const boundBottom = this.y + containerSize
+
+    // x1, x2, x3, ...
+    let point_XArray: number[] = Array(sideCount)
+      .fill(0)
+      .map(() => randBetween(boundLeft, boundRight))
+
+    // y1, y2, y3, ...
+    let point_YArray: number[] = Array(sideCount)
+      .fill(0)
+      .map(() => randBetween(boundTop, boundBottom))
+
+    let points: IPoint[] = point_XArray.map((x, i) => ({
+      x,
+      y: point_YArray[i]
+    }))
+
+    ctx.beginPath()
+    ctx.moveTo(points[0].x, points[0].y)
+
+    for (let i = 1; i < sideCount; i++) {
+      ctx.lineTo(points[i].x, points[i].y)
+    }
+
+    ctx.closePath()
+
+    ctx.fill()
   }
 }
