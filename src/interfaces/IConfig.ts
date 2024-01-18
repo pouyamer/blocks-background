@@ -6,10 +6,10 @@ interface IConfig {
     showFramesPerSecond: boolean
   }
   canvas: ICanvasConfig
-  square: {
+  tile: {
     /*
      if boundToLight is true,
-     hue and saturation will change on squares
+     hue and saturation will change on tiles
      that are lit.
     */
     boundToLight: boolean
@@ -17,13 +17,13 @@ interface IConfig {
     saturation: IColorValueConfig
     light: IColorValueConfig
     // Try above 15 for better performence
-    shapeSize: number
+    tileSize: number
     // h, s, l is set once app runs
     alpha: number
 
     hasBorders: boolean
-    // shapes: "square", "circle", "bowlingPin", "chaos", ...
-    shape: ShapeType
+    // innerShapes: "square", "circle", "bowlingPin", "chaos", ...
+    innerShape: InnerShapeType
 
     innerRectangleMode: {
       // frequency [0 - 1] in which the blocks get repainted (in innerRectangle mode)
@@ -39,7 +39,7 @@ interface IConfig {
       //             new shape
       borderOnFullShapeSize: boolean
 
-      // min and max values that width and height of the rectangle to shapeSize square
+      // min and max values that width and height of the rectangle to TileSize
       // if (forceSquare => true)
       //     gets both from width
       rectangleFractionToFullShapeWidth: IRange
@@ -49,6 +49,7 @@ interface IConfig {
     innerPolygonMode: {
       // side count of said Polygon (>3)
       sideCount: IRange
+      borderOnFullShapeSize: boolean
     }
 
     borderColor: IHslColor

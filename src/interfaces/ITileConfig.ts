@@ -1,9 +1,9 @@
-interface ISquareConfig {
+interface ITileConfig {
   fillColor: HslColor
   boundToLight: boolean
-  shapeSize: number
+  tileSize: number
   hasBorders: boolean
-  shape: ShapeType
+  innerShape: InnerShapeType
   borderColor?: HslColor
   willChangeHue: boolean
   willChangeSaturation: boolean

@@ -10,7 +10,7 @@ canvas.height = canvasSize.height
 
 let paused = false
 
-const { offColor: _offColor, shapeSize } = config.square
+const { offColor: _offColor, tileSize } = config.tile
 
 const offColor = new HslColor(
   _offColor.h,
@@ -19,18 +19,18 @@ const offColor = new HslColor(
   _offColor.a
 )
 
-let squares: Square[] = []
+let tiles: Tile[] = []
 
-// Setting the squares
-const setSquares = () => {
-  for (let i = 0; i < canvasSize.width / shapeSize; i++) {
-    for (let j = 0; j < canvasSize.height / shapeSize; j++) {
+// Setting the tiles
+const setTiles = () => {
+  for (let i = 0; i < canvasSize.width / tileSize; i++) {
+    for (let j = 0; j < canvasSize.height / tileSize; j++) {
       /* A duplicate of square config with new fillColor Value */
 
-      // Square(x, y, squareConfig)
-      const newSquare = new Square(i * shapeSize, j * shapeSize, config, i, j)
+      // Tile(x, y, squareConfig)
+      const newTile = new Tile(i * tileSize, j * tileSize, config, i, j)
 
-      squares.push(newSquare)
+      tiles.push(newTile)
     }
   }
 }
@@ -52,9 +52,9 @@ const render = () => {
     ctx.fillRect(0, 0, canvasSize.width, canvasSize.height)
   }
 
-  squares
+  tiles
     .filter(
-      square => !square.squareConfig.boundToLight || square.squareConfig.isLit
+      square => !square.tileConfig.boundToLight || square.tileConfig.isLit
     )
     .forEach(square => square.update(ctx))
 
@@ -110,10 +110,10 @@ elBtnAgreeWarning.addEventListener("click", async () => {
   })
 })
 
-//   set the squares
-setSquares()
+//   set the tiles
+setTiles()
 
-//   Render the squares
+//   Render the tiles
 render()
 
 canvas.addEventListener("click", () => {

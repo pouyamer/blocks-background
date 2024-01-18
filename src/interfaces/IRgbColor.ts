@@ -1,5 +1,8 @@
 interface IRgbColor {
-  r: number
-  g: number
-  b: number
+  red: number
+  green: number
+  blue: number
+  alpha: number
+  toString: () => string
+  toHsl: () => HslColor
 }

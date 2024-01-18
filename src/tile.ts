@@ -1,7 +1,7 @@
-class Square implements ISquare {
+class Tile implements ITile {
   colIndex: number
   rowIndex: number
-  squareConfig: ISquareConfig
+  tileConfig: ITileConfig
   x: number
   y: number
   appConfig: IConfig
@@ -24,11 +24,11 @@ class Square implements ISquare {
       alpha,
       boundToLight,
       borderColor,
-      shape,
-      shapeSize
-    } = this.appConfig.square
+      innerShape,
+      tileSize
+    } = this.appConfig.tile
 
-    this.squareConfig = {
+    this.tileConfig = {
       fillColor: new HslColor(
         this.determineStartingColorValue("hue", hue.startOnValue),
         this.determineStartingColorValue("saturation", saturation.startOnValue),
@@ -36,9 +36,9 @@ class Square implements ISquare {
         alpha
       ),
       boundToLight: boundToLight,
-      hasBorders: this.appConfig.square.hasBorders,
-      shape,
-      shapeSize,
+      hasBorders: this.appConfig.tile.hasBorders,
+      innerShape,
+      tileSize,
       borderColor: new HslColor(
         borderColor.h,
         borderColor.s,
@@ -55,14 +55,14 @@ class Square implements ISquare {
       isLit: Math.random() < light.frequancy
     }
 
-    const { isLit: isSquareLit } = this.squareConfig
+    const { isLit: isSquareLit } = this.tileConfig
 
     // reassigning willChangeHue and willChangeSaturation
     if (boundToLight) {
-      this.squareConfig.willChangeHue = isSquareLit
+      this.tileConfig.willChangeHue = isSquareLit
         ? Math.random() < hue.frequancy
         : false
-      this.squareConfig.willChangeSaturation = isSquareLit
+      this.tileConfig.willChangeSaturation = isSquareLit
         ? Math.random() < saturation.frequancy
         : false
     }
@@ -75,7 +75,7 @@ class Square implements ISquare {
     colorValueName: ColorValueNameType,
     startOnValue: StartOnValueType
   ) => {
-    const { hue, saturation, light } = this.appConfig.square
+    const { hue, saturation, light } = this.appConfig.tile
 
     let colorValue: IColorValueConfig
     switch (colorValueName) {
@@ -137,8 +137,8 @@ class Square implements ISquare {
   lightOn = () => {
     // If RandomlyChange is true, change the light value on random [0 - incOrDec]
 
-    const { fillColor } = this.squareConfig
-    const { randomlyChange, step, range } = this.appConfig.square.light
+    const { fillColor } = this.tileConfig
+    const { randomlyChange, step, range } = this.appConfig.tile.light
 
     const { max } = range
 
@@ -147,7 +147,7 @@ class Square implements ISquare {
       : step.increase
 
     if (fillColor.l > max) {
-      this.squareConfig.isTurningOn = false
+      this.tileConfig.isTurningOn = false
       fillColor.l = max
     }
   }
@@ -155,33 +155,33 @@ class Square implements ISquare {
   lightOff = () => {
     // If RandomlyChange is true, change the light value on random [0 - incOrDec]
 
-    const { l: squareL } = this.squareConfig.fillColor
+    const { l: tileL } = this.tileConfig.fillColor
 
-    const { randomlyChange, step, range } = this.appConfig.square.light
+    const { randomlyChange, step, range } = this.appConfig.tile.light
 
     const { min } = range
 
-    this.squareConfig.fillColor.l -= randomlyChange
+    this.tileConfig.fillColor.l -= randomlyChange
       ? Math.random() * step.decrease
       : step.decrease
 
-    if (squareL < min) {
-      this.squareConfig.isTurningOn = true
-      this.squareConfig.fillColor.l = min
+    if (tileL < min) {
+      this.tileConfig.isTurningOn = true
+      this.tileConfig.fillColor.l = min
     }
   }
 
   lightOnAndOff = () => {
-    this.squareConfig.isTurningOn ? this.lightOn() : this.lightOff()
+    this.tileConfig.isTurningOn ? this.lightOn() : this.lightOff()
   }
 
   // Hue Functions:
 
   hueUp = () => {
     // If RandomlyChange is true, change the hue value on random [0 - incOrDec]
-    const { fillColor } = this.squareConfig
+    const { fillColor } = this.tileConfig
 
-    const { randomlyChange, step, range } = this.appConfig.square.hue
+    const { randomlyChange, step, range } = this.appConfig.tile.hue
 
     const { max } = range
 
@@ -190,16 +190,16 @@ class Square implements ISquare {
       : step.increase
 
     if (fillColor.h > max) {
-      this.squareConfig.isHueIncreasing = false
+      this.tileConfig.isHueIncreasing = false
       fillColor.h = max
     }
   }
 
   hueDown = () => {
     // If RandomlyChange is true, change the hue value on random [0 - incOrDec]
-    const { fillColor } = this.squareConfig
+    const { fillColor } = this.tileConfig
 
-    const { randomlyChange, step, range } = this.appConfig.square.hue
+    const { randomlyChange, step, range } = this.appConfig.tile.hue
 
     const { min } = range
 
@@ -208,19 +208,19 @@ class Square implements ISquare {
       : step.decrease
 
     if (fillColor.h < min) {
-      this.squareConfig.isHueIncreasing = true
+      this.tileConfig.isHueIncreasing = true
       fillColor.h = min
     }
   }
 
   hueUpAndDown = () => {
-    this.squareConfig.isHueIncreasing ? this.hueUp() : this.hueDown()
+    this.tileConfig.isHueIncreasing ? this.hueUp() : this.hueDown()
   }
 
   changeValueOnValuesMode = (colorValueName: ColorValueNameType) => {
-    const { hue, saturation, light } = this.appConfig.square
+    const { hue, saturation, light } = this.appConfig.tile
 
-    const { fillColor } = this.squareConfig
+    const { fillColor } = this.tileConfig
     let colorValue
 
     switch (colorValueName) {
@@ -261,9 +261,9 @@ class Square implements ISquare {
 
   saturate = () => {
     // If RandomlyChange is true, change the hue value on random [0 - incOrDec]
-    const { fillColor } = this.squareConfig
+    const { fillColor } = this.tileConfig
 
-    const { randomlyChange, step, range } = this.appConfig.square.saturation
+    const { randomlyChange, step, range } = this.appConfig.tile.saturation
 
     const { max } = range
 
@@ -272,16 +272,16 @@ class Square implements ISquare {
       : step.increase
 
     if (fillColor.s > max) {
-      this.squareConfig.isBecomingSaturated = false
+      this.tileConfig.isBecomingSaturated = false
       fillColor.s = max
     }
   }
 
   desaturate = () => {
     // If RandomlyChange is true, change the hue value on random [0 - incOrDec]
-    const { fillColor } = this.squareConfig
+    const { fillColor } = this.tileConfig
 
-    const { randomlyChange, step, range } = this.appConfig.square.saturation
+    const { randomlyChange, step, range } = this.appConfig.tile.saturation
 
     const { min } = range
 
@@ -290,17 +290,17 @@ class Square implements ISquare {
       : step.decrease
 
     if (fillColor.s < min) {
-      this.squareConfig.isBecomingSaturated = true
+      this.tileConfig.isBecomingSaturated = true
       fillColor.s = min
     }
   }
 
   saturateAndDesaturate = () => {
-    this.squareConfig.isBecomingSaturated ? this.saturate() : this.desaturate()
+    this.tileConfig.isBecomingSaturated ? this.saturate() : this.desaturate()
   }
 
   fillAndStroke = (ctx: CanvasRenderingContext2D) => {
-    const { shape, fillColor, borderColor } = this.squareConfig
+    const { innerShape, fillColor, borderColor } = this.tileConfig
 
     if (!borderColor) {
       throw new Error()
@@ -309,7 +309,7 @@ class Square implements ISquare {
     ctx.strokeStyle = borderColor.toString()
     ctx.fillStyle = fillColor.toString()
 
-    switch (shape) {
+    switch (innerShape) {
       case "square":
         this.drawInSquareMode(ctx)
         break
@@ -339,29 +339,29 @@ class Square implements ISquare {
   }
 
   update = (ctx: CanvasRenderingContext2D) => {
-    const { light, hue, saturation } = this.appConfig.square
+    const { light, hue, saturation } = this.appConfig.tile
 
-    const { fillColor } = this.squareConfig
+    const { fillColor } = this.tileConfig
 
     this.fillAndStroke(ctx)
 
-    if (this.squareConfig.willChangeHue && hue.varietyMode === "values")
+    if (this.tileConfig.willChangeHue && hue.varietyMode === "values")
       this.changeValueOnValuesMode("hue")
     if (saturation.varietyMode === "values")
       this.changeValueOnValuesMode("saturation")
 
-    if (this.squareConfig.isLit) {
+    if (this.tileConfig.isLit) {
       if (light.varietyMode === "values") this.changeValueOnValuesMode("light")
       if (light.varietyMode === "range") this.lightOnAndOff()
       if (light.varietyMode === "value") fillColor.l = light.value
     }
 
-    // This Lights up the squares on run
+    // This Lights up the tiles on run
 
-    if (this.squareConfig.willChangeHue && hue.varietyMode === "range")
+    if (this.tileConfig.willChangeHue && hue.varietyMode === "range")
       this.hueUpAndDown()
     if (
-      this.squareConfig.willChangeSaturation &&
+      this.tileConfig.willChangeSaturation &&
       saturation.varietyMode === "range"
     ) {
       this.saturateAndDesaturate()
@@ -369,21 +369,21 @@ class Square implements ISquare {
   }
 
   drawInSquareMode = (ctx: CanvasRenderingContext2D) => {
-    const { shapeSize, hasBorders } = this.appConfig.square
+    const { tileSize, hasBorders } = this.appConfig.tile
 
-    ctx.fillRect(this.x, this.y, shapeSize, shapeSize)
+    ctx.fillRect(this.x, this.y, tileSize, tileSize)
 
-    hasBorders && ctx.strokeRect(this.x, this.y, shapeSize, shapeSize)
+    hasBorders && ctx.strokeRect(this.x, this.y, tileSize, tileSize)
   }
 
   drawInCircleMode = (ctx: CanvasRenderingContext2D) => {
-    const { shapeSize, hasBorders } = this.appConfig.square
+    const { tileSize, hasBorders } = this.appConfig.tile
 
     ctx.beginPath()
     ctx.arc(
-      this.x + shapeSize * 0.5,
-      this.y + shapeSize * 0.5,
-      shapeSize * 0.5,
+      this.x + tileSize * 0.5,
+      this.y + tileSize * 0.5,
+      tileSize * 0.5,
       0,
       Math.PI * 2
     )
@@ -392,31 +392,29 @@ class Square implements ISquare {
   }
 
   drawInBowlingPinMode = (ctx: CanvasRenderingContext2D) => {
-    const { shapeSize, hasBorders } = this.appConfig.square
+    const { tileSize, hasBorders } = this.appConfig.tile
 
-    ctx.fillRect(this.x, this.y, shapeSize, shapeSize)
+    ctx.fillRect(this.x, this.y, tileSize, tileSize)
     ctx.beginPath()
-    ctx.arc(this.x, this.y, shapeSize * 0.5, 0, Math.PI * 2)
+    ctx.arc(this.x, this.y, tileSize * 0.5, 0, Math.PI * 2)
     ctx.fill()
     if (hasBorders) {
       ctx.beginPath()
-      ctx.arc(this.x, this.y, shapeSize * 0.5, 0.5 * Math.PI, Math.PI * 2)
-      ctx.lineTo(this.x + shapeSize, this.y)
-      ctx.lineTo(this.x + shapeSize, this.y + shapeSize)
-      ctx.lineTo(this.x, this.y + shapeSize)
-      ctx.lineTo(this.x, this.y + shapeSize * 0.5)
+      ctx.arc(this.x, this.y, tileSize * 0.5, 0.5 * Math.PI, Math.PI * 2)
+      ctx.lineTo(this.x + tileSize, this.y)
+      ctx.lineTo(this.x + tileSize, this.y + tileSize)
+      ctx.lineTo(this.x, this.y + tileSize)
+      ctx.lineTo(this.x, this.y + tileSize * 0.5)
       ctx.stroke()
     }
   }
 
   drawInChaosMode = (ctx: CanvasRenderingContext2D) => {
-    const { shapeSize, hasBorders } = this.appConfig.square
+    const { tileSize, hasBorders } = this.appConfig.tile
 
-    const x =
-      this.x + Math.random() * shapeSize - (Math.random() * shapeSize) / 2
-    const y =
-      this.y + Math.random() * shapeSize - (Math.random() * shapeSize) / 2
-    const size = Math.random() * shapeSize
+    const x = this.x + Math.random() * tileSize - (Math.random() * tileSize) / 2
+    const y = this.y + Math.random() * tileSize - (Math.random() * tileSize) / 2
+    const size = Math.random() * tileSize
 
     // fill
     ctx.fillRect(x, y, size, size)
@@ -521,19 +519,19 @@ class Square implements ISquare {
       borderOnFullShapeSize,
       rectangleFractionToFullShapeWidth: { min: minRFW, max: maxRFW },
       rectangleFractionToFullShapeHeight: { min: minRFH, max: maxRFH }
-    } = this.appConfig.square.innerRectangleMode
+    } = this.appConfig.tile.innerRectangleMode
 
-    const { shapeSize, hasBorders } = this.appConfig.square
+    const { tileSize, hasBorders } = this.appConfig.tile
 
-    const shapeWidth = shapeSize * randBetween(minRFW, maxRFW)
+    const shapeWidth = tileSize * randBetween(minRFW, maxRFW)
 
     const shapeHeight = forceSquare
       ? shapeWidth
-      : shapeSize * randBetween(minRFH, maxRFH)
+      : tileSize * randBetween(minRFH, maxRFH)
 
     const [shapeStartingPointX, shapeStartingPointY] = getShapeStartingPosition(
       partPaintStartingPosition,
-      shapeSize,
+      tileSize,
       shapeWidth,
       shapeHeight
     )
@@ -556,22 +554,24 @@ class Square implements ISquare {
     }
 
     if (borderOnFullShapeSize && hasBorders) {
-      ctx.strokeRect(this.x, this.y, shapeSize, shapeSize)
+      ctx.strokeRect(this.x, this.y, tileSize, tileSize)
     }
   }
 
   drawInInnerPolygon = (ctx: CanvasRenderingContext2D) => {
-    const { shapeSize: containerSize, hasBorders } = this.appConfig.square
+    const { tileSize, hasBorders } = this.appConfig.tile
 
-    const { min: sideCountMin, max: sideCountMax } =
-      this.appConfig.square.innerPolygonMode.sideCount
+    const {
+      borderOnFullShapeSize,
+      sideCount: { min: sideCountMin, max: sideCountMax }
+    } = this.appConfig.tile.innerPolygonMode
 
     const sideCount = Math.round(randBetween(sideCountMin, sideCountMax))
 
     const boundLeft = this.x
-    const boundRight = this.x + containerSize
+    const boundRight = this.x + tileSize + 2
     const boundTop = this.y
-    const boundBottom = this.y + containerSize
+    const boundBottom = this.y + tileSize + 2
 
     // x1, x2, x3, ...
     let point_XArray: number[] = Array(sideCount)
@@ -598,5 +598,13 @@ class Square implements ISquare {
     ctx.closePath()
 
     ctx.fill()
+
+    if (hasBorders) {
+      if (!borderOnFullShapeSize) {
+        ctx.stroke()
+      } else {
+        ctx.strokeRect(this.x, this.y, tileSize, tileSize)
+      }
+    }
   }
 }

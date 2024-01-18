@@ -1,4 +1,4 @@
-type ShapeType =
+type InnerShapeType =
   | "square"
   | "circle"
   | "bowlingPin"

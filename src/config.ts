@@ -9,7 +9,7 @@ let config: IConfig = {
     size: { width: innerWidth, height: innerHeight },
     clearAfterEachFrame: false
   },
-  square: {
+  tile: {
     /*
      if boundToLight is true,
      hue and saturation will change on squares
@@ -20,14 +20,14 @@ let config: IConfig = {
     saturation: saturationConfig,
     light: lightConfig,
     // Try above 15 for better performence
-    shapeSize: 20,
+    tileSize: 20,
     // h, s, l is set once app runs
     alpha: 1,
-    hasBorders: true,
-    shape: "innerRectangle",
+    hasBorders: false,
+    innerShape: "innerRectangle",
     innerRectangleMode: {
       frequency: 1,
-      startingPosition: "random",
+      startingPosition: "xAxis",
       forceSquare: false,
       borderOnFullShapeSize: true,
       rectangleFractionToFullShapeWidth: {
@@ -44,13 +44,14 @@ let config: IConfig = {
       sideCount: {
         min: 4,
         max: 4
-      }
+      },
+      borderOnFullShapeSize: false
     },
     borderColor: {
       h: 340,
       s: 90,
       l: 0,
-      a: 0.1
+      a: 1
     },
     offColor: {
       h: 20,

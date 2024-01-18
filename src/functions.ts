@@ -25,61 +25,6 @@ const hslToRgb = (hslColor: IHslColor) => {
   }
 }
 
-const rgbToHsl = (rgbColor: IRgbColor) => {
-  const { r, g, b } = rgbColor
-
-  const rPrime = r / 255
-  const gPrime = g / 255
-  const bPrime = b / 255
-
-  const cMax = Math.max(rPrime, gPrime, bPrime)
-  const cMin = Math.min(rPrime, gPrime, bPrime)
-
-  const delta = cMax - cMin
-
-  const calculateHue = (
-    rPrime: number,
-    gPrime: number,
-    bPrime: number,
-    delta: number
-  ) => {
-    if (delta === 0) return 0
-    if (rPrime === cMax) return 60 * (((gPrime - bPrime) / delta) % 6)
-    if (gPrime === cMax) return 60 * ((bPrime - rPrime) / delta + 2)
-    if (bPrime === cMax) return 60 * ((rPrime - gPrime) / delta + 4)
-
-    throw new Error()
-  }
-
-  const calculateSaturation = (delta: number, l: number) => {
-    return delta === 0 ? 0 : delta / (1 - Math.abs(2 * l - 1))
-  }
-
-  const hue =
-    calculateHue(rPrime, gPrime, bPrime, delta) < 0
-      ? 360 + calculateHue(rPrime, gPrime, bPrime, delta)
-      : calculateHue(rPrime, gPrime, bPrime, delta)
-  const light = (cMax + cMin) / 2
-  const saturation = calculateSaturation(delta, light)
-
-  return {
-    h: hue,
-    s: saturation * 100,
-    l: light * 100,
-    a: 1
-  }
-}
-
-const invertColor = (hslColor: IHslColor) => {
-  const rgbColor = hslToRgb(hslColor)
-  const { r, g, b } = rgbColor
-  return rgbToHsl({
-    r: 255 - r,
-    g: 255 - g,
-    b: 255 - b
-  })
-}
-
 const hslStringify = (color: IHslColor) => {
   const { h, s, l, a } = color
   return `hsl(${h}, ${s}%, ${l}%, ${a})`
@@ -102,4 +47,42 @@ const willMakeTriangle = (
   const side3 = Math.sqrt(Math.pow(x1 - x3, 2) + Math.pow(y1 - y3, 2))
 
   return side1 + side2 < side3 && side2 + side3 < side1 && side1 + side3 < side2
+}
+
+const getPixelHSLArray = (scannedImage: ImageData) => {
+  const rgbvaluesLength = scannedImage.data.length
+
+  let pixelsArray: Pixel[] = []
+  let red = 0
+  let green = 0
+  let blue = 0
+  let alpha = 0
+
+  for (let i = 0; i < rgbvaluesLength; i++) {
+    if ((i + 1) % 4 === 0) {
+      alpha = scannedImage.data[i]
+      const x = (i / 4) % canvas.width
+      const y = Math.round(i / 4 / canvas.height)
+
+      const pixel = new Pixel(
+        x,
+        y,
+        new RgbColor(red, green, blue, alpha).toHsl()
+      )
+
+      pixelsArray.push(pixel)
+    }
+    if ((i + 1) % 4 === 1) {
+      red = scannedImage.data[i]
+    }
+    if ((i + 1) % 4 === 2) {
+      green = scannedImage.data[i]
+    }
+
+    if ((i + 1) % 4 === 3) {
+      blue = scannedImage.data[i]
+    }
+  }
+
+  return pixelsArray
 }

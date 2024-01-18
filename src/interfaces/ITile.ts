@@ -1,9 +1,9 @@
-interface ISquare {
+interface ITile {
   // x index
   colIndex: number
   // y index
   rowIndex: number
-  squareConfig: ISquareConfig
+  tileConfig: ITileConfig
   x: number
   y: number
 }
